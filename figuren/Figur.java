@@ -1,49 +1,48 @@
 package figuren;
 
-public const enum piecetype{
-    KING
-    QUEEN
-    PAWN
-    KNIGHT
-    BISHOP
-    ROOK
-    
-}
 
 public class Figur {
+    public enum piecetype {
+        KING,
+        QUEEN,
+        PAWN,
+        KNIGHT,
+        BISHOP,
+        ROOK
+
+    }
+
     public int value;
-    public int figurtype;
+    public piecetype piecetype;
     public boolean moved;
     public int[][] moves;
     public int color; //0 = white, 1 = black
 
-    public Figur(color, figurtype){
-        switch(figurtype){
+    public Figur(int iColor, piecetype iPiecetype) {
+        this.piecetype = iPiecetype;
+        this.moved = false;
+        switch (iPiecetype) {
             case KING:
-                value = 9999999999999;
+                this.value = 99999999;
                 break;
             case QUEEN:
-                value = 9;
-            break;
+                this.value = 9;
+                break;
             case PAWN:
-            value = 1;
-            break;
+                this.value = 1;
+                break;
             case KNIGHT:
-            value = 3;
-            break;
+                this.value = 3;
+                break;
             case BISHOP:
-            value = 3;
-            break;
+                this.value = 3;
+                break;
             case ROOK:
-            value = 5;
-            break
+                this.value = 5;
+                break;
         }
+        this.color = iColor;
     }
 
-    pulbic moves loadMoves(){
-        int[][] moves;
-
-        return moves 
-    }
 }
 

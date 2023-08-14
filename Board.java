@@ -3,6 +3,10 @@ import figuren.Figur;
 public class Board {
     public Figur[][] feld;
 
+    public Board() {
+        this.feld = new Figur[8][8];
+    }
+
     public Board(Figur[][] feld) {
         this.feld = feld;
     }

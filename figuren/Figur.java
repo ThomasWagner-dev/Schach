@@ -17,13 +17,14 @@ public class Figur {
     public boolean moved;
     public int[][] moves;
     public int color; //0 = white, 1 = black
-
+//{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
     public Figur(int iColor, piecetype iPiecetype) {
         this.piecetype = iPiecetype;
         this.moved = false;
         switch (iPiecetype) {
             case KING:
                 this.value = 99999999;
+                this.moves= new int[][]{{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1}{-2,0},{2,0}};
                 break;
             case QUEEN:
                 this.value = 9;
@@ -43,6 +44,7 @@ public class Figur {
         }
         this.color = iColor;
     }
+
 
 }
 

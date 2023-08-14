@@ -1,7 +1,7 @@
 package figuren;
 
 
-public class Figur {
+public class Piece {
     public enum piecetype {
         KING,
         QUEEN,

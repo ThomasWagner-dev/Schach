@@ -1,13 +1,13 @@
 import figuren.Figur;
 
-public class Spielfeld {
+public class Board {
     public Figur[][] feld;
 
-    public Spielfeld(Figur[][] feld) {
+    public Board(Figur[][] feld) {
         this.feld = feld;
     }
 
-    public void buildSpielbrett() {
+    public void buildBoard() {
         for (int i = 0; i < 8; i++) {
             setFeld(i, 1, );
         }

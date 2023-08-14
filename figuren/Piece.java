@@ -18,7 +18,7 @@ public class Piece {
     public int[][] moves;
     public int color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
-    public Figur(int iColor, piecetype iPiecetype) {
+    public Piece(int iColor, piecetype iPiecetype) {
         this.piecetype = iPiecetype;
         this.moved = false;
         switch (iPiecetype) {

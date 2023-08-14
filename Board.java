@@ -1,13 +1,13 @@
-import figuren.Figur;
+import figuren.Piece;
 
 public class Board {
-    public Figur[][] feld;
+    public Piece[][] feld;
 
     public Board() {
-        this.feld = new Figur[8][8];
+        this.feld = new Piece[8][8];
     }
 
-    public Board(Figur[][] feld) {
+    public Board(Piece[][] feld) {
         this.feld = feld;
     }
 
@@ -20,7 +20,7 @@ public class Board {
         }
     }
 
-    public void setFeld(int x, int y, Figur figur) {
-        this.feld[x][y] = figur;
+    public void setFeld(int x, int y, Piece piece) {
+        this.feld[x][y] = piece;
     }
 }

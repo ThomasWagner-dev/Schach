@@ -49,12 +49,21 @@ public class MovesetGenerator {
             vorzeichen = -1;
         }
         ArrayList<int[]> pawnMoves = new ArrayList<>();
-        int[][] temp = {{0,1 * vorzeichen}, {0,2 * vorzeichen}};
+        int[][] temp = {{0,vorzeichen}, {0,2 * vorzeichen}};
         Collections.addAll(pawnMoves, temp);
         if (piece.moved) {
             removeMoveFromArraylist(pawnMoves, new int[]{0,2*vorzeichen});
         }
         piece.moves = pawnMoves;
+    }
+    private void generateKnightMoves(Piece piece){
+        ArrayList<int[]> knightMoves = new ArrayList<>();
+        int[][] temp = {
+                {-2, 1}, {-1, 2}, {1, 2}, {2, 1},  // Rechts oben im Uhrzeigersinn
+                {2, -1}, {1, -2}, {-1, -2}, {-2, -1} // Links unten im Uhrzeigersinn
+        };
+        Collections.addAll(knightMoves, temp);
+        piece.moves = knightMoves;
     }
 
     private void removeMoveFromArraylist(ArrayList<int[]> list, int[] move){

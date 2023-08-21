@@ -6,7 +6,7 @@ public class GameManager {
 
     public GameManager() {
         this.board = new Board();
-        board.buildBoard(Color.WHITE);
+        board.buildBoard(ChessColor.WHITE);
         this.timer = new Timer();
         this.gui = new SchachGUI();
         this.gameState = GameState.STANDBY;

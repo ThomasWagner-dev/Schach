@@ -8,9 +8,9 @@ public class Piece {
     public Piecetype piecetype;
     public boolean moved;
     public int[][] moves;
-    public Color color; //0 = white, 1 = black
+    public ChessColor color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
-    public Piece(Color iColor, Piecetype iPiecetype, int posX, int posY ) {
+    public Piece(ChessColor iChessColor, Piecetype iPiecetype, int posX, int posY ) {
         this.piecetype = iPiecetype;
         this.moved = false;
         this.posX = posX;
@@ -35,7 +35,7 @@ public class Piece {
                 this.value = 5;
                 break;
         }
-        this.color = iColor;
+        this.color = iChessColor;
     }
 
 

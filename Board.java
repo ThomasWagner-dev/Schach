@@ -7,8 +7,8 @@ public class Board {
         this.board = new Piece[8][8];
     }
 
-    public void buildBoard(Color side) {
-        Color otherSide = side == Color.WHITE ? Color.BLACK : Color.WHITE;
+    public void buildBoard(ChessColor side) {
+        ChessColor otherSide = side == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
         // Place Pawns
         for (int i = 0; i < 8; i++) {
             this.board[1][i] = new Piece(side, Piecetype.PAWN, i, 1);
@@ -56,7 +56,7 @@ public class Board {
         return null;
     }
 
-    public boolean isFieldAttackedBy(Color color, int x, int y) {
+    public boolean isFieldAttackedBy(ChessColor color, int x, int y) {
         // Collect Pieces
         ArrayList<Piece> pieces = new ArrayList<>();
         for (Piece[] row : this.board) {

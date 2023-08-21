@@ -1,19 +1,30 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class SchachGUI extends JFrame {
+public class Gui extends JFrame {
     private final int SIZE = 8;
     private final int CELL_SIZE = 80;
-    private final String[] FIGUREN_BILDER = {
-            "rook.png", "knight.png", "bishop.png", "queen.png",
-            "king.png", "bishop.png", "knight.png", "rook.png"
-    };
-    private final String BAUERN_BILD = "pawn.png";
+    private final String IMAGE_PATH = "C:\\Java-Projekte\\SchachFrontend\\imgs";
 
+    private final String[] WEISS_FIGUREN_BILDER = {
+            "turm_w.png", "sprienger_w.png", "laeufer_w.png", "koenig_w.png",
+            "dame_w.png", "laeufer_w.png", "sprienger_w.png", "turm_w.png"
+    };
+
+    private final String[] SCHWARZ_FIGUREN_BILDER = {
+            "turm_s.png", "sprienger_s.png", "laeufer_s.png", "dame_s.png",
+            "koenig_s.png", "laeufer_s.png", "sprienger_s.png", "turm_s.png"
+    };
+    private final String BAUERN_BILD_W = "bauer_w.png";
+    private final String BAUERN_BILD_S = "bauer_s.png";
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
 
-    public SchachGUI() {
+    public Gui() {
         setTitle("Schachspiel");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -58,7 +69,6 @@ public class SchachGUI extends JFrame {
     }
 
 
-
     private void initializeSchachbrett() {
         int cellSize = schachbrettPanel.getPreferredSize().width / (SIZE + 2);
 
@@ -85,20 +95,25 @@ public class SchachGUI extends JFrame {
                 panel.setPreferredSize(new Dimension(cellSize, cellSize));
                 panel.setBackground(getCellColor(row, col));
                 schachbrettPanel.add(panel);
+
             }
         }
     }
+
 
     private void drawSchachbrett() {
         for (int row = 1; row <= SIZE; row++) {
             for (int col = 1; col <= SIZE; col++) {
                 JPanel panel = (JPanel) schachbrettPanel.getComponent(row * (SIZE + 1) + col);
                 panel.removeAll();
-
-                if (row == 1 || row == SIZE) {
-                    drawFigur(panel, FIGUREN_BILDER[col - 1]);
+                if (row == SIZE - 8 || row == SIZE) {
+                    drawFigur(panel, WEISS_FIGUREN_BILDER[col - 1]);
+                } else if (row == 1 || row == 1) {
+                    drawFigur(panel, SCHWARZ_FIGUREN_BILDER[col - 1]);
+                } else if (row == SIZE -7  || row == SIZE - 1) {
+                    drawFigur(panel, BAUERN_BILD_W);
                 } else if (row == 2 || row == SIZE - 1) {
-                    drawFigur(panel, BAUERN_BILD);
+                    drawFigur(panel, BAUERN_BILD_S);
                 } else {
                     drawFigur(panel, "");
                 }
@@ -108,14 +123,41 @@ public class SchachGUI extends JFrame {
         }
     }
 
+    private BufferedImage removeBackground(BufferedImage originalImage, Color backgroundColor) {
+        BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        for (int y = 0; y < originalImage.getHeight(); y++) {
+            for (int x = 0; x < originalImage.getWidth(); x++) {
+                Color pixelColor = new Color(originalImage.getRGB(x, y), true);
+
+                if (!pixelColor.equals(backgroundColor)) {
+                    newImage.setRGB(x, y, pixelColor.getRGB());
+                }
+            }
+        }
+
+        return newImage;
+    }
+
     private void drawFigur(JPanel panel, String bildDatei) {
         if (!bildDatei.isEmpty()) {
-            ImageIcon icon = new ImageIcon(bildDatei);
-            Image image = icon.getImage().getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
-            JLabel label = new JLabel(new ImageIcon(image));
-            panel.add(label);
+            String imagePath = IMAGE_PATH + "\\" + bildDatei;
+            System.out.println("Loading image: " + imagePath);
+
+            try {
+                BufferedImage originalImage = ImageIO.read(new File(imagePath));
+                System.out.println("Image loaded successfully.");
+
+                Image scaledImage = originalImage.getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
+                JLabel label = new JLabel(new ImageIcon(scaledImage));
+                panel.add(label);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Error loading image: " + bildDatei);
+            }
         }
     }
+
 
     private Color getCellColor(int row, int col) {
         if ((row + col) % 2 == 0) {
@@ -126,6 +168,6 @@ public class SchachGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(SchachGUI::new);
+        SwingUtilities.invokeLater(Gui::new);
     }
 }

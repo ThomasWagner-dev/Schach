@@ -1,28 +1,24 @@
 package figuren;
 public class Piece {
-    public enum piecetype {
-        KING,
-        QUEEN,
-        PAWN,
-        KNIGHT,
-        BISHOP,
-        ROOK
 
-    }
 
+
+    public int posX;
+    public int posY;
     public int value;
-    public piecetype piecetype;
+    public Piecetype piecetype;
     public boolean moved;
     public int[][] moves;
     public int color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
-    public Piece(int iColor, piecetype iPiecetype) {
+    public Piece(int iColor, Piecetype iPiecetype, int posX, int posY ) {
         this.piecetype = iPiecetype;
         this.moved = false;
-        switch (iPiecetype) {
+        this.posX = posX;
+        this.posY = posY;
+        switch (this.piecetype) {
             case KING:
                 this.value = 99999999;
-                this.moves= new int[][]{{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-2,0},{2,0}};
                 break;
             case QUEEN:
                 this.value = 9;

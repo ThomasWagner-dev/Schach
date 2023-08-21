@@ -1,5 +1,4 @@
-import figuren.Piece;
-
+import figuren.*;
 public class MovesetGenerator {
     private Board field;
     public void generateMoves(Piece piece, Board field){
@@ -24,7 +23,7 @@ public class MovesetGenerator {
     private void generateKingMoves(Piece piece){
         int[][] theoreticalMoves = new int[][]{{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-2,0},{2,0}};
         //check if rook is on A1/A8 if white/black
-        if(piece.color =  && field.feld[0][0].piecetype=ROOK){
+        if(piece.color == figuren.Piececolor.WHITE && field.feld[0][0].piecetype== figuren.Piecetype.ROOK){
 
         }
     }

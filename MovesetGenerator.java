@@ -30,17 +30,17 @@ public class MovesetGenerator {
         Collections.addAll(theoreticalMoves, temp);
         //check if rook is on A1/A8 if white/black
         if(piece.color == figuren.Piececolor.WHITE){
-            if(!(field.getPiece(0,0).color == Piececolor.WHITE && field.getPiece(0,0).moved == false)){
+            if(!(field.getPiece(0,0).color == Piececolor.WHITE && !field.getPiece(0, 0).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{-2,0});
             }
-            if(!(field.getPiece(7,0).color == Piececolor.WHITE && field.getPiece(7,0).moved == false)){
+            if(!(field.getPiece(7,0).color == Piececolor.WHITE && !field.getPiece(7, 0).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{2,0});
             }
         }else{
-            if(!(field.getPiece(0,7).color == Piececolor.BLACK && field.getPiece(0,7).moved == false)){
+            if(!(field.getPiece(0,7).color == Piececolor.BLACK && !field.getPiece(0, 7).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{-2,0});
             }
-            if(!(field.getPiece(7,7).color == Piececolor.BLACK && field.getPiece(7,7).moved == false)){
+            if(!(field.getPiece(7,7).color == Piececolor.BLACK && !field.getPiece(7, 7).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{2,0});
             }
         }

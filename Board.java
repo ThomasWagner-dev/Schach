@@ -23,7 +23,7 @@ public class Board {
     }
 
     public Piece getPiece(int x, int y) {
-        return this.feld[x][y];
+        return this.feld[y][x];
     }
 
     public int[] getPiecePos(Piece p) {

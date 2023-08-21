@@ -1,8 +1,9 @@
-package figuren;
+import figuren.Piece;
 
 public class MovesetGenerator {
     public int[][] generatePawnMoves(Piece piece, Board feld, int posX, int posY){
         //
-        if(feld[posX])
+        int[][] moves = new int[4][2];
+        return moves;
     }
 }

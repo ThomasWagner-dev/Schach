@@ -13,10 +13,8 @@ public class Board {
 
     public void buildBoard() {
         for (int i = 0; i < 8; i++) {
-            setFeld(i, 1, );
         }
         for (int i = 0; i < 8; i++) {
-            setFeld(i, 6, );
         }
     }
 

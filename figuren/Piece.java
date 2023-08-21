@@ -1,6 +1,4 @@
 package figuren;
-
-
 public class Piece {
     public enum piecetype {
         KING,
@@ -24,7 +22,7 @@ public class Piece {
         switch (iPiecetype) {
             case KING:
                 this.value = 99999999;
-                this.moves= new int[][]{{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1}{-2,0},{2,0}};
+                this.moves= new int[][]{{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-2,0},{2,0}};
                 break;
             case QUEEN:
                 this.value = 9;

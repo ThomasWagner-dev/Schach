@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Piece {
 
 
@@ -7,7 +9,7 @@ public class Piece {
     public int value;
     public Piecetype piecetype;
     public boolean moved;
-    public int[][] moves;
+    public ArrayList<int[]> moves;
     public ChessColor color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
     public Piece(ChessColor iChessColor, Piecetype iPiecetype, int posX, int posY ) {

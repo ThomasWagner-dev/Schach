@@ -43,9 +43,18 @@ public class MovesetGenerator {
         }
     }
 
-    public int[][] generatePawnMoves(Piece piece, Board feld){
-        //
-        return new int[4][2];
+    private void generatePawnMoves(Piece piece){
+        int vorzeichen = 1;
+        if (piece.color == ChessColor.BLACK) {
+            vorzeichen = -1;
+        }
+        ArrayList<int[]> pawnMoves = new ArrayList<>();
+        int[][] temp = {{0,1 * vorzeichen}, {0,2 * vorzeichen}};
+        Collections.addAll(pawnMoves, temp);
+        if (piece.moved) {
+            removeMoveFromArraylist(pawnMoves, new int[]{0,2*vorzeichen});
+        }
+        piece.moves = pawnMoves;
     }
 
     private void removeMoveFromArraylist(ArrayList<int[]> list, int[] move){

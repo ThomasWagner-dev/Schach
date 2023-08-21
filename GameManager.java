@@ -1,4 +1,5 @@
 import figuren.Piece;
+import figuren.Piececolor;
 
 public class GameManager {
     public Board board;
@@ -8,7 +9,7 @@ public class GameManager {
 
     public GameManager() {
         this.board = new Board();
-        board.buildBoard();
+        board.buildBoard(Piececolor.WHITE);
         this.timer = new Timer();
         this.gui = new SchachGUI();
         this.gameState = GameState.STANDBY;

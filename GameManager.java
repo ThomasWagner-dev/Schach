@@ -1,3 +1,5 @@
+import figuren.Piece;
+
 public class GameManager {
     public Board board;
     public Timer timer;
@@ -27,5 +29,8 @@ public class GameManager {
     }
 
     public void movePiece(int x, int y, int x2, int y2) {
+        Piece piece = this.board.feld[x][y];
+        this.board.setFeld(x, y, null);
+        this.board.setFeld(x2, y2, piece);
     }
 }

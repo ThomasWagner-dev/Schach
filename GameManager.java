@@ -1,6 +1,3 @@
-import figuren.Piece;
-import figuren.Piececolor;
-
 public class GameManager {
     public Board board;
     public Timer timer;
@@ -9,7 +6,7 @@ public class GameManager {
 
     public GameManager() {
         this.board = new Board();
-        board.buildBoard(Piececolor.WHITE);
+        board.buildBoard(Color.WHITE);
         this.timer = new Timer();
         this.gui = new SchachGUI();
         this.gameState = GameState.STANDBY;

@@ -1,5 +1,3 @@
-import figuren.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -29,18 +27,18 @@ public class MovesetGenerator {
         int[][] temp = {{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-2,0},{2,0}};
         Collections.addAll(theoreticalMoves, temp);
         //check if rook is on A1/A8 if white/black
-        if(piece.color == figuren.Piececolor.WHITE){
-            if(!(field.getPiece(0,0).color == Piececolor.WHITE && !field.getPiece(0, 0).moved)){
+        if(piece.color == Color.WHITE){
+            if(!(field.getPiece(0,0).color == Color.WHITE && !field.getPiece(0, 0).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{-2,0});
             }
-            if(!(field.getPiece(7,0).color == Piececolor.WHITE && !field.getPiece(7, 0).moved)){
+            if(!(field.getPiece(7,0).color == Color.WHITE && !field.getPiece(7, 0).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{2,0});
             }
         }else{
-            if(!(field.getPiece(0,7).color == Piececolor.BLACK && !field.getPiece(0, 7).moved)){
+            if(!(field.getPiece(0,7).color == Color.BLACK && !field.getPiece(0, 7).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{-2,0});
             }
-            if(!(field.getPiece(7,7).color == Piececolor.BLACK && !field.getPiece(7, 7).moved)){
+            if(!(field.getPiece(7,7).color == Color.BLACK && !field.getPiece(7, 7).moved)){
                 removeMoveFromArraylist(theoreticalMoves, new int[]{2,0});
             }
         }

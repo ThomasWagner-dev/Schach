@@ -1,6 +1,4 @@
-import figuren.Piece;
-import figuren.Piececolor;
-import figuren.Piecetype;
+import java.util.ArrayList;
 
 public class Board {
     public Piece[][] board;
@@ -9,8 +7,8 @@ public class Board {
         this.board = new Piece[8][8];
     }
 
-    public void buildBoard(Piececolor side) {
-        Piececolor otherSide = side == Piececolor.WHITE ? Piececolor.BLACK : Piececolor.WHITE;
+    public void buildBoard(Color side) {
+        Color otherSide = side == Color.WHITE ? Color.BLACK : Color.WHITE;
         // Place Pawns
         for (int i = 0; i < 8; i++) {
             this.board[1][i] = new Piece(side, Piecetype.PAWN, i, 1);
@@ -56,5 +54,24 @@ public class Board {
             }
         }
         return null;
+    }
+
+    public boolean isFieldAttackedBy(Color color, int x, int y) {
+        // Collect Pieces
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Piece[] row : this.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == color) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        // Check if any piece can attack the field
+        for (Piece piece : pieces) {
+            if (piece.canAttack(this, x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

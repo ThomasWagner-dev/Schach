@@ -1,4 +1,3 @@
-package figuren;
 public class Piece {
 
 
@@ -9,9 +8,9 @@ public class Piece {
     public Piecetype piecetype;
     public boolean moved;
     public int[][] moves;
-    public Piececolor color; //0 = white, 1 = black
+    public Color color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
-    public Piece(Piececolor iColor, Piecetype iPiecetype, int posX, int posY ) {
+    public Piece(Color iColor, Piecetype iPiecetype, int posX, int posY ) {
         this.piecetype = iPiecetype;
         this.moved = false;
         this.posX = posX;
@@ -40,5 +39,13 @@ public class Piece {
     }
 
 
+    public boolean canAttack(Board board, int x, int y) {
+        for (int[] move : this.moves) {
+            if (this.posX + move[0] == x && this.posY + move[1] == y) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

@@ -22,7 +22,7 @@ public class Board {
         this.feld[x][y] = piece;
     }
 
-    public Piece getFeld(int x, int y) {
+    public Piece getPiece(int x, int y) {
         return this.feld[x][y];
     }
 

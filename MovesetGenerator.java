@@ -48,11 +48,10 @@ public class MovesetGenerator {
 
     public int[][] generatePawnMoves(Piece piece, Board feld){
         //
-        int[][] moves = new int[4][2];
-        return moves;
+        return new int[4][2];
     }
 
-    private void removeMoveFromArraylist(ArrayList list, int[] move){
+    private void removeMoveFromArraylist(ArrayList<int[]> list, int[] move){
         list.forEach((p)->{
             if(p==move){
                 list.remove(p);

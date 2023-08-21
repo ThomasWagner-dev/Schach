@@ -30,8 +30,8 @@ public class GameManager {
     }
 
     public void movePiece(int x, int y, int x2, int y2) {
-        Piece piece = this.board.feld[x][y];
-        this.board.setFeld(x, y, null);
-        this.board.setFeld(x2, y2, piece);
+        Piece piece = this.board.board[x][y];
+        this.board.setField(x, y, null);
+        this.board.setField(x2, y2, piece);
     }
 }

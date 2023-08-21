@@ -64,4 +64,139 @@ public class MovesetGenerator {
             }
         });
     }
+
+    private int[] checkHowFarPiececCanMove(Piece piece, int[] direction){
+        //if diagonal else horizontal/vertical
+        if (direction[0] != 0 && direction[1] != 0) {
+            //diagonal
+            if(direction[0]>0&&direction[1]>0) {
+                //to top right
+                for (int i = 0; i < direction[0]; i++) {
+                    if (piece.posX + i > 7 || piece.posY + i > 7) {
+                        // oob
+                        return new int[]{i - 1, i - 1};
+                    }
+
+                    if (field.getPiece(piece.posX + i, piece.posY + i) != null) {
+                        //if white else black
+                        if (piece.color == Piececolor.WHITE) {
+                            if (field.getPiece(piece.posX + i, piece.posY + i).color == Piececolor.WHITE) {
+                                //same color -> cant take piece
+                                return new int[]{i - 1, i - 1};
+                            } else {
+                                return new int[]{i, i};
+                            }
+                        } else {
+                            if (field.getPiece(piece.posX + i, piece.posY + i).color == Piececolor.BLACK) {
+                                return new int[]{i - 1, i - 1};
+                            } else {
+                                return new int[]{i, i};
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            if(direction[0]>0&&direction[1]<0) {
+            //to down right
+            for(int i=0; i<direction[0]; i++){
+                if(piece.posX+i>7||piece.posY-i>7){
+                    // oob
+                    return new int[]{i-1,i+1};
+                }
+
+                if(field.getPiece(piece.posX+i,piece.posY+i)!=null){
+                    //if white else black
+                    if(piece.color==Piececolor.WHITE){
+                        if(field.getPiece(piece.posX+i,piece.posY-i).color==Piececolor.WHITE){
+                            //same color -> cant take piece
+                            return new int[]{i-1,i+1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }else{
+                        if(field.getPiece(piece.posX+i,piece.posY-i).color==Piececolor.BLACK){
+                            return new int[]{i-1,i+1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }
+
+                }
+            }
+
+            if(direction[0]<0&&direction[1]>0) {
+            //to top left
+            for(int i=0; i<-direction[0]; i++){
+                if(piece.posX-i>7||piece.posY+i>7){
+                    // oob
+                    return new int[]{i+1,i-1};
+                }
+
+                if(field.getPiece(piece.posX-i,piece.posY+i)!=null){
+                    //if white else black
+                    if(piece.color==Piececolor.WHITE){
+                        if(field.getPiece(piece.posX-i,piece.posY+i).color==Piececolor.WHITE){
+                            //same color -> cant take piece
+                            return new int[]{i+1,i-1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }else{
+                        if(field.getPiece(piece.posX-i,piece.posY+i).color==Piececolor.BLACK){
+                            return new int[]{i+1,i-1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }
+
+                }
+            }
+
+            if(direction[0]<0&&direction[1]<0) {
+            //to down left
+            for(int i=0; i<-direction[0]; i++){
+                if(piece.posX-i>7||piece.posY-i>7){
+                    // oob
+                    return new int[]{i+1,i+1};
+                }
+
+                if(field.getPiece(piece.posX-i,piece.posY-i)!=null){
+                    //if white else black
+                    if(piece.color==Piececolor.WHITE){
+                        if(field.getPiece(piece.posX-i,piece.posY-i).color==Piececolor.WHITE){
+                            //same color -> cant take piece
+                            return new int[]{i+1,i+1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }else{
+                        if(field.getPiece(piece.posX-i,piece.posY-i).color==Piececolor.BLACK){
+                            return new int[]{i+1,i+1};
+                        }else{
+                            return new int[]{i,i};
+                        }
+                    }
+
+                }
+            }
+        }else{
+            //horizontal/vertical
+            if(direction[0]!=0){
+                //horizontal rechts
+                for(int x = 0; x<7; x++){
+                    if(field.getPiece(piece.posX+x,piece.posY+x)!=null){
+                        if (piece.posX + x > 7) {
+                            // oob
+                            return new int[]{x - 1, direction[1]};
+                        }
+                    }
+                }
+
+            }else{
+                //vertical
+            }
+        }
+    }
 }

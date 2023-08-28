@@ -13,6 +13,7 @@ public class Piece {
     public ChessColor color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
     public Piece(ChessColor iChessColor, Piecetype iPiecetype, int posY, int posX ) {
+        this.moves = new ArrayList<>();
         this.piecetype = iPiecetype;
         this.moved = false;
         this.posX = posX;

@@ -60,29 +60,12 @@ public class SchachGUI extends JFrame {
     }
 
     public void updateSchachbrett(Piece[][] board) {
-        String[][] schachbrett = {
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""},
-                {"", "", "", "", "", "", "", ""}
-        };
-        for (int y = 0; y < board.length; y++) {
-            for (int x = 0; x < board[y].length; x++) {
-                String bildDatei = getBildDatei(board, y, x);
-                schachbrett[y][x] = bildDatei;
-            }
-        }
-
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 JButton button = (JButton) schachbrettPanel.getComponent(row * SIZE + col);
                 button.removeAll();
 
-                String bildDatei = schachbrett[row][col];
+                String bildDatei = getBildDatei(board, row, col);
                 if (!bildDatei.isEmpty()) {
                     String imagePath = IMAGE_PATH + File.separator + bildDatei;
                     try {
@@ -98,7 +81,6 @@ public class SchachGUI extends JFrame {
                         System.err.println("Error loading image: " + bildDatei);
                     }
                 }
-
                 button.revalidate();
                 button.repaint();
             }

@@ -28,7 +28,10 @@ public class Piece {
             case PAWN:
                 this.value = 1;
                 break;
-            case KNIGHT, BISHOP:
+            case KNIGHT:
+                this.value = 3;
+                break;
+            case BISHOP:
                 this.value = 3;
                 break;
             case ROOK:

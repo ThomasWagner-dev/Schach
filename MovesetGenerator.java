@@ -2,38 +2,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MovesetGenerator {
-    private Board field;
 
-    public void generateMoves(Piece piece, Board field) {
-        field = field;
+    public static void generateMoves(Board field, Piece piece) {
         switch (piece.piecetype) {
             case KING:
-                generateKingMoves(piece);
+                generateKingMoves(field,piece);
                 break;
             case QUEEN:
-                generateQueenMoves(piece);
+                generateQueenMoves(field,piece);
                 break;
             case PAWN:
-                generatePawnMoves(piece);
+                generatePawnMoves(field,piece);
                 break;
             case KNIGHT:
-                generateKnightMoves(piece);
+                generateKnightMoves(field,piece);
                 break;
             case BISHOP:
-                generateBishopMoves(piece);
+                generateBishopMoves(field, piece);
                 break;
             case ROOK:
-                generateRookMoves(piece);
+                generateRookMoves(field, piece);
                 break;
-        }
-        for (int[] moves: piece.moves) {
-            if(!canPieceMoveTo(piece, piece.posX + moves[0], piece.posY + moves[1])) {
-                removeMoveFromArraylist(piece.moves, moves);
-            }
         }
     }
 
-    private void generateRookMoves(Piece piece) {
+    private static void generateRookMoves(Board field, Piece piece) {
         ArrayList<int[]> rookMoves = new ArrayList<>();
         // Add all
         for (int i = 1; i < 8; i++) {
@@ -51,18 +44,24 @@ public class MovesetGenerator {
         // Remove if piece in the way
         for (int[] move : rookMoves) {
             if (move[0] != 0) {
-                if (!isPathClearHor(piece, piece.posX + move[1])) {
+                if (!isPathClearHor(field, piece, piece.posX + move[1])) {
                     removeMoveFromArraylist(rookMoves, move);
                 }
             } else {
-                if (!isPathClearVert(piece, piece.posY + move[0])) {
+                if (!isPathClearVert(field, piece, piece.posY + move[0])) {
                     removeMoveFromArraylist(rookMoves, move);
                 }
             }
         }
+        // Remove is cant move
+        for (int[] move : rookMoves) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(rookMoves, move);
+            }
+        }
         //check if castle
         //check if rook is on A1/A8 if white/black
-        if (piece.color == ChessColor.WHITE) {
+        /*if (piece.color == ChessColor.WHITE) {
             if (((piece.posX == 0 && piece.posY == 0)||(piece.posX == 8 && piece.posY == 0))&&piece.moved==false&&field.getPiece(4,0).moved==false) {
                 rookMoves.add(new int[]{0,3});
             }
@@ -76,12 +75,12 @@ public class MovesetGenerator {
             if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
                 //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});
             }
-        }
+        }*/
 
         piece.moves = rookMoves;
     }
 
-    public boolean isPathClearHor(Piece piece, int x) {
+    public static boolean isPathClearHor(Board field, Piece piece, int x) {
         if (piece.posX < x) {
             for (int i = piece.posX + 1; i < x; i++) {
                 if (field.board[piece.posY][i] != null) {
@@ -98,7 +97,7 @@ public class MovesetGenerator {
         return true;
     }
 
-    public boolean isPathClearVert(Piece p, int y) {
+    public static boolean isPathClearVert(Board field, Piece p, int y) {
         if (p.posY < y) {
             for (int i = p.posY + 1; i < y; i++) {
                 if (field.board[i][p.posX] != null) {
@@ -115,7 +114,7 @@ public class MovesetGenerator {
         return true;
     }
 
-    public boolean isPathClearDiag(Piece p, int x, int y) {
+    public static  boolean isPathClearDiag(Board field, Piece p, int x, int y) {
         if (p.posX > x) {
             if (p.posY > y) {
                 for (int i = 1; p.posX + i < x; i++) {
@@ -148,7 +147,7 @@ public class MovesetGenerator {
         return true;
     }
 
-    private void generateKingMoves(Piece piece) {
+    private static void generateKingMoves(Board field, Piece piece) {
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, 0}, {2, 0}};
         Collections.addAll(theoreticalMoves, temp);
@@ -160,7 +159,7 @@ public class MovesetGenerator {
         }
         // Check for Valid Move
         for (int[] move : theoreticalMoves) {
-            if(!canPieceMoveTo(piece, piece.posX + move[1], piece.posY + move[0])) {
+            if(!canPieceMoveTo(field, piece, piece.posY + move[0], piece.posY + move[1])) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
@@ -191,23 +190,23 @@ public class MovesetGenerator {
         piece.moves=theoreticalMoves;
     }
 
-    private void generateQueenMoves(Piece piece){
+    private static void generateQueenMoves(Board field, Piece piece){
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         //add up moves
         for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{0, y});
+            theoreticalMoves.add(new int[]{y, 0});
         }
         //add down moves
         for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{0, -y});
+            theoreticalMoves.add(new int[]{-y, 0});
         }
         //add right moves
         for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{x,0});
+            theoreticalMoves.add(new int[]{0,x});
         }
         //add left moves
         for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{x,0});
+            theoreticalMoves.add(new int[]{0,-x});
         }
         //add up right moves
         for(int i = 0; i<7; i++){
@@ -215,7 +214,7 @@ public class MovesetGenerator {
         }
         //add down right moves
         for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,-i});
+            theoreticalMoves.add(new int[]{-i,i});
         }
         //add down left moves
         for(int i = 0; i<7; i++){
@@ -223,29 +222,29 @@ public class MovesetGenerator {
         }
         //add up left moves
         for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,i});
+            theoreticalMoves.add(new int[]{i,-i});
         }
         // Remove OOBounds
         for (int[] move : theoreticalMoves) {
-            if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
         // Remove if piece in the way
         for (int[] move : theoreticalMoves) {
             if (move[0] != 0) {
-                if (!isPathClearHor(piece, piece.posX + move[0])) {
+                if (!isPathClearHor(field, piece, piece.posX + move[1])) {
                     removeMoveFromArraylist(theoreticalMoves, move);
                 }
             } else {
-                if (!isPathClearVert(piece, piece.posY + move[1])) {
+                if (!isPathClearVert(field, piece, piece.posY + move[0])) {
                     removeMoveFromArraylist(theoreticalMoves, move);
                 }
             }
         }
         // Remove is cant move
         for (int[] move : theoreticalMoves) {
-            if (!canPieceMoveTo(piece, piece.posX + move[0], piece.posY + move[1])) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
@@ -253,7 +252,7 @@ public class MovesetGenerator {
     }
 
 
-    private void generateBishopMoves(Piece piece){
+    private static void generateBishopMoves(Board field, Piece piece){
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         //add up right moves
         for(int i = 0; i<7; i++){
@@ -273,15 +272,26 @@ public class MovesetGenerator {
         }
         // Remove OOBounds
         for (int[] move : theoreticalMoves) {
-            if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
-        //
-        piece.moves=theoreticalMoves;
+        // Remove if piece in the way
+        for (int[] move : theoreticalMoves) {
+            if (!isPathClearDiag(field, piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
+        // Remove is cant move
+        for (int[] move : theoreticalMoves) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
+        piece.moves = theoreticalMoves;
     }
 
-    private void generatePawnMoves(Piece piece) {
+    private static void generatePawnMoves(Board field, Piece piece) {
         int vorzeichen = 1;
         if (piece.color == ChessColor.BLACK) {
             vorzeichen = -1;
@@ -292,20 +302,51 @@ public class MovesetGenerator {
         if (piece.moved) {
             removeMoveFromArraylist(pawnMoves, new int[]{0, 2 * vorzeichen});
         }
+        // Check for OOBounds
+        for (int[] move : pawnMoves) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
+                removeMoveFromArraylist(pawnMoves, move);
+            }
+        }
+        //Check if piece in the way
+        for (int[] move : pawnMoves) {
+            if (move[1] == 0 && !isPathClearVert(field, piece, piece.posY + move[0])) {
+                removeMoveFromArraylist(pawnMoves, move);
+            }
+        }
+        // Check for Valid Move
+        for (int[] move : pawnMoves) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(pawnMoves, move);
+            }
+        }
+
         piece.moves = pawnMoves;
     }
 
-    private void generateKnightMoves(Piece piece) {
+    private static void generateKnightMoves(Board field, Piece piece) {
         ArrayList<int[]> knightMoves = new ArrayList<>();
         int[][] temp = {
                 {-2, 1}, {-1, 2}, {1, 2}, {2, 1},  // Rechts oben im Uhrzeigersinn
                 {2, -1}, {1, -2}, {-1, -2}, {-2, -1} // Links unten im Uhrzeigersinn
         };
         Collections.addAll(knightMoves, temp);
+        // Check for OOBounds
+        for (int[] move : knightMoves) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
+                removeMoveFromArraylist(knightMoves, move);
+            }
+        }
+        // Check for Valid Move
+        for (int[] move : knightMoves) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(knightMoves, move);
+            }
+        }
         piece.moves = knightMoves;
     }
 
-    private void removeMoveFromArraylist(ArrayList<int[]> list, int[] move) {
+    private static void removeMoveFromArraylist(ArrayList<int[]> list, int[] move) {
         list.forEach((p) -> {
             if (p == move) {
                 list.remove(p);
@@ -313,8 +354,7 @@ public class MovesetGenerator {
         });
     }
 
-
-    public ChessColor isInCheck(Board field, ChessColor color) {
+    public static  ChessColor isInCheck(Board field, ChessColor color) {
         ArrayList<Piece> pieces = new ArrayList<>();
         for (Piece[] row : field.board) {
             for (Piece piece : row) {
@@ -334,10 +374,10 @@ public class MovesetGenerator {
         return null;
     }
 
-    public boolean canPieceMoveTo(Piece p, int x, int y) {
-        if (field.board[x][y] == null) {
+    public static boolean canPieceMoveTo(Board field, Piece p, int y, int x) {
+        if (field.board[y][x] == null) {
             return true;
         }
-        return field.board[x][y].color != p.color;
+        return field.board[y][x].color != p.color;
     }
 }

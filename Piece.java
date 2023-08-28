@@ -12,7 +12,7 @@ public class Piece {
     public ArrayList<int[]> moves;
     public ChessColor color; //0 = white, 1 = black
 //{1, 0}, {1,1},{0,1},{-1,1},,{-1,-1},{0,-1},{1,-1}{2,0},{-2,0}
-    public Piece(ChessColor iChessColor, Piecetype iPiecetype, int posX, int posY ) {
+    public Piece(ChessColor iChessColor, Piecetype iPiecetype, int posY, int posX ) {
         this.piecetype = iPiecetype;
         this.moved = false;
         this.posX = posX;
@@ -27,10 +27,7 @@ public class Piece {
             case PAWN:
                 this.value = 1;
                 break;
-            case KNIGHT:
-                this.value = 3;
-                break;
-            case BISHOP:
+            case KNIGHT, BISHOP:
                 this.value = 3;
                 break;
             case ROOK:
@@ -41,9 +38,9 @@ public class Piece {
     }
 
 
-    public boolean canAttack(Board board, int x, int y) {
+    public boolean canAttack(int y, int x) {
         for (int[] move : this.moves) {
-            if (this.posX + move[0] == x && this.posY + move[1] == y) {
+            if (this.posX + move[1] == x && this.posY + move[0] == y) {
                 return true;
             }
         }

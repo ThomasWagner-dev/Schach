@@ -194,19 +194,19 @@ public class MovesetGenerator {
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         //add up moves
         for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{0, y});
+            theoreticalMoves.add(new int[]{y, 0});
         }
         //add down moves
         for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{0, -y});
+            theoreticalMoves.add(new int[]{-y, 0});
         }
         //add right moves
         for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{x,0});
+            theoreticalMoves.add(new int[]{0,x});
         }
         //add left moves
         for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{x,0});
+            theoreticalMoves.add(new int[]{0,-x});
         }
         //add up right moves
         for(int i = 0; i<7; i++){
@@ -214,7 +214,7 @@ public class MovesetGenerator {
         }
         //add down right moves
         for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,-i});
+            theoreticalMoves.add(new int[]{-i,i});
         }
         //add down left moves
         for(int i = 0; i<7; i++){
@@ -222,29 +222,29 @@ public class MovesetGenerator {
         }
         //add up left moves
         for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,i});
+            theoreticalMoves.add(new int[]{i,-i});
         }
         // Remove OOBounds
         for (int[] move : theoreticalMoves) {
-            if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
         // Remove if piece in the way
         for (int[] move : theoreticalMoves) {
             if (move[0] != 0) {
-                if (!isPathClearHor(field, piece, piece.posX + move[0])) {
+                if (!isPathClearHor(field, piece, piece.posX + move[1])) {
                     removeMoveFromArraylist(theoreticalMoves, move);
                 }
             } else {
-                if (!isPathClearVert(field, piece, piece.posY + move[1])) {
+                if (!isPathClearVert(field, piece, piece.posY + move[0])) {
                     removeMoveFromArraylist(theoreticalMoves, move);
                 }
             }
         }
         // Remove is cant move
         for (int[] move : theoreticalMoves) {
-            if (!canPieceMoveTo(field, piece, piece.posX + move[0], piece.posY + move[1])) {
+            if (!canPieceMoveTo(field, piece, piece.posX + move[1], piece.posY + move[0])) {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }

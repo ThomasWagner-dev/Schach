@@ -44,18 +44,18 @@ public class MovesetGenerator {
         }
         // Remove OOBounds
         for (int[] move : rookMoves) {
-             if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+             if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
                  removeMoveFromArraylist(rookMoves, move);
              }
         }
         // Remove if piece in the way
         for (int[] move : rookMoves) {
             if (move[0] != 0) {
-                if (!isPathClearHor(piece, piece.posX + move[0])) {
+                if (!isPathClearHor(piece, piece.posX + move[1])) {
                     removeMoveFromArraylist(rookMoves, move);
                 }
             } else {
-                if (!isPathClearVert(piece, piece.posY + move[1])) {
+                if (!isPathClearVert(piece, piece.posY + move[0])) {
                     removeMoveFromArraylist(rookMoves, move);
                 }
             }
@@ -152,6 +152,18 @@ public class MovesetGenerator {
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, 0}, {2, 0}};
         Collections.addAll(theoreticalMoves, temp);
+        // Check for OOBounds
+        for (int[] move : theoreticalMoves) {
+            if (piece.posX + move[1] > 7 || piece.posX + move[1] < 0 || piece.posY + move[0] > 7 || piece.posY + move[0] < 0) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
+        // Check for Valid Move
+        for (int[] move : theoreticalMoves) {
+            if(!canPieceMoveTo(piece, piece.posX + move[1], piece.posY + move[0])) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
         //check if rook is on A1/A8 if white/black
         if (piece.color == ChessColor.WHITE) {
             if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
@@ -213,6 +225,30 @@ public class MovesetGenerator {
         for(int i = 0; i<7; i++){
             theoreticalMoves.add(new int[]{-i,i});
         }
+        // Remove OOBounds
+        for (int[] move : theoreticalMoves) {
+            if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
+        // Remove if piece in the way
+        for (int[] move : theoreticalMoves) {
+            if (move[0] != 0) {
+                if (!isPathClearHor(piece, piece.posX + move[0])) {
+                    removeMoveFromArraylist(theoreticalMoves, move);
+                }
+            } else {
+                if (!isPathClearVert(piece, piece.posY + move[1])) {
+                    removeMoveFromArraylist(theoreticalMoves, move);
+                }
+            }
+        }
+        // Remove is cant move
+        for (int[] move : theoreticalMoves) {
+            if (!canPieceMoveTo(piece, piece.posX + move[0], piece.posY + move[1])) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
         piece.moves=theoreticalMoves;
     }
 
@@ -235,6 +271,13 @@ public class MovesetGenerator {
         for(int i = 0; i<7; i++){
             theoreticalMoves.add(new int[]{-i,i});
         }
+        // Remove OOBounds
+        for (int[] move : theoreticalMoves) {
+            if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+                removeMoveFromArraylist(theoreticalMoves, move);
+            }
+        }
+        //
         piece.moves=theoreticalMoves;
     }
 

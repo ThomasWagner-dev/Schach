@@ -9,17 +9,22 @@ public class MovesetGenerator {
         field = field;
         switch (piece.piecetype) {
             case KING:
-
+                generateKingMoves(piece);
                 break;
             case QUEEN:
+                generateQueenMoves(piece);
                 break;
             case PAWN:
+                generatePawnMoves(piece);
                 break;
             case KNIGHT:
+                generateKnightMoves(piece);
                 break;
             case BISHOP:
+                generateBishopMoves(piece);
                 break;
             case ROOK:
+                generateRookMoves(piece);
                 break;
         }
         for (int[] moves: piece.moves) {
@@ -27,6 +32,103 @@ public class MovesetGenerator {
                 removeMoveFromArraylist(piece.moves, moves);
             }
         }
+    }
+
+    private void generateRookMoves(Piece piece) {
+        ArrayList<int[]> rookMoves = new ArrayList<>();
+        // Add all
+        for (int i = 1; i < 8; i++) {
+            rookMoves.add(new int[]{i, 0});
+            rookMoves.add(new int[]{-i, 0});
+            rookMoves.add(new int[]{0, i});
+            rookMoves.add(new int[]{0, -i});
+        }
+        // Remove OOBounds
+        for (int[] move : rookMoves) {
+             if (piece.posX + move[0] > 7 || piece.posX + move[0] < 0 || piece.posY + move[1] > 7 || piece.posY + move[1] < 0) {
+                 removeMoveFromArraylist(rookMoves, move);
+             }
+        }
+        // Remove if piece in the way
+        for (int[] move : rookMoves) {
+            if (move[0] != 0) {
+                if (!isPathClearHor(piece, piece.posX + move[0])) {
+                    removeMoveFromArraylist(rookMoves, move);
+                }
+            } else {
+                if (!isPathClearVert(piece, piece.posY + move[1])) {
+                    removeMoveFromArraylist(rookMoves, move);
+                }
+            }
+        }
+        piece.moves = rookMoves;
+    }
+
+    public boolean isPathClearHor(Piece piece, int x) {
+        if (piece.posX < x) {
+            for (int i = piece.posX + 1; i < x; i++) {
+                if (field.board[piece.posY][i] != null) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = piece.posX - 1; i > x; i--) {
+                if (field.board[piece.posY][i] != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPathClearVert(Piece p, int y) {
+        if (p.posY < y) {
+            for (int i = p.posY + 1; i < y; i++) {
+                if (field.board[i][p.posX] != null) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = p.posY - 1; i > y; i--) {
+                if (field.board[i][p.posX] != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPathClearDiag(Piece p, int x, int y) {
+        if (p.posX > x) {
+            if (p.posY > y) {
+                for (int i = 1; p.posX + i < x; i++) {
+                    if (field.board[p.posY + i][p.posX + i] != null) {
+                        return false;
+                    }
+                }
+            } else {
+                for (int i = 1; p.posX + i < x; i++) {
+                    if (field.board[p.posY - i][p.posX + i] != null) {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            if (p.posY > y) {
+                for (int i = 1; p.posX - i > x; i++) {
+                    if (field.board[p.posY + i][p.posX - i] != null) {
+                        return false;
+                    }
+                }
+            } else {
+                for (int i = 1; p.posX - i > x; i++) {
+                    if (field.board[p.posY - i][p.posX - i] != null) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private void generateKingMoves(Piece piece) {
@@ -88,144 +190,6 @@ public class MovesetGenerator {
                 list.remove(p);
             }
         });
-    }
-
-    private int[] checkHowFarPiececCanMove(Piece piece, int[] direction) {
-        //if diagonal else horizontal/vertical
-        if (direction[0] != 0 && direction[1] != 0) {
-            //diagonal
-            if (direction[0] > 0 && direction[1] > 0) {
-                //to top right
-                for (int i = 0; i < direction[0]; i++) {
-                    if (piece.posX + i > 7 || piece.posY + i > 7) {
-                        // oob
-                        return new int[]{i - 1, i - 1};
-                    }
-
-                    if (field.getPiece(piece.posX + i, piece.posY + i) != null) {
-                        //if white else black
-                        if (piece.color == ChessColor.WHITE) {
-                            if (field.getPiece(piece.posX + i, piece.posY + i).color == ChessColor.WHITE) {
-                                //same color -> cant take piece
-                                return new int[]{i - 1, i - 1};
-                            } else {
-                                return new int[]{i, i};
-                            }
-                        } else {
-                            if (field.getPiece(piece.posX + i, piece.posY + i).color == ChessColor.BLACK) {
-                                return new int[]{i - 1, i - 1};
-                            } else {
-                                return new int[]{i, i};
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            if (direction[0] > 0 && direction[1] < 0) {
-                //to down right
-                for (int i = 0; i < direction[0]; i++) {
-                    if (piece.posX + i > 7 || piece.posY - i > 7) {
-                        // oob
-                        return new int[]{i - 1, i + 1};
-                    }
-
-                    if (field.getPiece(piece.posX + i, piece.posY + i) != null) {
-                        //if white else black
-                        if (piece.color == ChessColor.WHITE) {
-                            if (field.getPiece(piece.posX + i, piece.posY - i).color == ChessColor.WHITE) {
-                                //same color -> cant take piece
-                                return new int[]{i - 1, i + 1};
-                            } else {
-                                return new int[]{i, i};
-                            }
-                        } else {
-                            if (field.getPiece(piece.posX + i, piece.posY - i).color == ChessColor.BLACK) {
-                                return new int[]{i - 1, i + 1};
-                            } else {
-                                return new int[]{i, i};
-                            }
-                        }
-
-                    }
-                }
-
-                if (direction[0] < 0 && direction[1] > 0) {
-                    //to top left
-                    for (int i = 0; i < -direction[0]; i++) {
-                        if (piece.posX - i > 7 || piece.posY + i > 7) {
-                            // oob
-                            return new int[]{i + 1, i - 1};
-                        }
-
-                        if (field.getPiece(piece.posX - i, piece.posY + i) != null) {
-                            //if white else black
-                            if (piece.color == ChessColor.WHITE) {
-                                if (field.getPiece(piece.posX - i, piece.posY + i).color == ChessColor.WHITE) {
-                                    //same color -> cant take piece
-                                    return new int[]{i + 1, i - 1};
-                                } else {
-                                    return new int[]{i, i};
-                                }
-                            } else {
-                                if (field.getPiece(piece.posX - i, piece.posY + i).color == ChessColor.BLACK) {
-                                    return new int[]{i + 1, i - 1};
-                                } else {
-                                    return new int[]{i, i};
-                                }
-                            }
-
-                        }
-                    }
-
-                    if (direction[0] < 0 && direction[1] < 0) {
-                        //to down left
-                        for (int i = 0; i < -direction[0]; i++) {
-                            if (piece.posX - i > 7 || piece.posY - i > 7) {
-                                // oob
-                                return new int[]{i + 1, i + 1};
-                            }
-
-                            if (field.getPiece(piece.posX - i, piece.posY - i) != null) {
-                                //if white else black
-                                if (piece.color == ChessColor.WHITE) {
-                                    if (field.getPiece(piece.posX - i, piece.posY - i).color == ChessColor.WHITE) {
-                                        //same color -> cant take piece
-                                        return new int[]{i + 1, i + 1};
-                                    } else {
-                                        return new int[]{i, i};
-                                    }
-                                } else {
-                                    if (field.getPiece(piece.posX - i, piece.posY - i).color == ChessColor.BLACK) {
-                                        return new int[]{i + 1, i + 1};
-                                    } else {
-                                        return new int[]{i, i};
-                                    }
-                                }
-
-                            }
-                        }
-                    } else {
-                        //horizontal/vertical
-                        if (direction[0] != 0) {
-                            //horizontal rechts
-                            for (int x = 0; x < 7; x++) {
-                                if (field.getPiece(piece.posX + x, piece.posY + x) != null) {
-                                    if (piece.posX + x > 7) {
-                                        // oob
-                                        return new int[]{x - 1, direction[1]};
-                                    }
-                                }
-                            }
-
-                        } else {
-                            //vertical
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public ChessColor isInCheck(Board field, ChessColor color) {

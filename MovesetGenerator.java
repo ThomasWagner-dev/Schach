@@ -36,7 +36,7 @@ public class MovesetGenerator {
         }
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
         //check if castle
         //check if rook is on A1/A8 if white/black
         /*if (piece.color == ChessColor.WHITE) {
@@ -130,7 +130,7 @@ public class MovesetGenerator {
         piece.moves = theoreticalMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
         //check if rook is on A1/A8 if white/black
         if (piece.color == ChessColor.WHITE) {
             if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
@@ -194,7 +194,7 @@ public class MovesetGenerator {
         piece.moves = theoreticalMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
     }
 
 
@@ -219,7 +219,7 @@ public class MovesetGenerator {
         piece.moves = theoreticalMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
     }
 
     private static void generatePawnMoves(Board field, Piece piece) {
@@ -236,14 +236,14 @@ public class MovesetGenerator {
         piece.moves = pawnMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
     }
 
-    private static void removeInvalidMoves(Board field, Piece p) {
+    private static void removeAllyAttacks(Board field, Piece p) {
         ArrayList<int[]> movesToRemove = new ArrayList<>();
 
         for (int[] move : p.moves) {
-            if (!canPieceMoveTo(field, p, p.posX + move[1], p.posY + move[0])) {
+            if (!isAllyPiece(field, p, p.posX + move[1], p.posY + move[0])) {
                 movesToRemove.add(move);
             }
         }
@@ -291,7 +291,7 @@ public class MovesetGenerator {
         Collections.addAll(theoreticalMoves, temp);
         piece.moves = theoreticalMoves;
         removeOOBounds(piece);
-        removeInvalidMoves(field, piece);
+        removeAllyAttacks(field, piece);
     }
 
     private static void removeMoveFromArraylist(ArrayList<int[]> list, int[] move) {
@@ -306,30 +306,78 @@ public class MovesetGenerator {
         }
     }
 
-    public static  ChessColor isInCheck(Board field, ChessColor color) {
-        ArrayList<Piece> pieces = new ArrayList<>();
+    public static  ChessColor isInCheck(Board field) {
+        ArrayList<Piece> whitePieces = new ArrayList<>();
+        ArrayList<Piece> blackPieces = new ArrayList<>();
         for (Piece[] row : field.board) {
             for (Piece piece : row) {
-                if (piece != null && piece.color == color) {
-                    pieces.add(piece);
+                if (piece != null && piece.color == ChessColor.WHITE) {
+                    whitePieces.add(piece);
                 }
             }
         }
-        for (Piece piece : pieces) {
+        for (Piece[] row : field.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == ChessColor.BLACK) {
+                    blackPieces.add(piece);
+                }
+            }
+        }
+        for (Piece piece : whitePieces) {
             if (piece.piecetype == Piecetype.KING) {
-                int[] pos = field.getPiecePos(piece);
-                if (field.isFieldAttackedBy(color, pos[0], pos[1])) {
-                    return color;
+                if (field.isFieldAttackedBy(ChessColor.BLACK, piece.posY, piece.posX)) {
+                    return ChessColor.WHITE;
+                }
+            }
+        }
+        for (Piece piece : blackPieces) {
+            if (piece.piecetype == Piecetype.KING) {
+                if (field.isFieldAttackedBy(ChessColor.WHITE, piece.posY, piece.posX)) {
+                    return ChessColor.BLACK;
                 }
             }
         }
         return null;
     }
 
-    public static boolean canPieceMoveTo(Board field, Piece p, int y, int x) {
+    public static boolean wouldMoveLeadToCheck(Board field, ChessColor color, Piece p, int y, int x) {
+        Board temp = new Board();
+        temp.board = field.board.clone();
+        temp.setField(p.posY, p.posX, null);
+        temp.setField(y, x, p);
+        return isInCheck(temp) == color;
+    }
+
+    public static boolean isAllyPiece(Board field, Piece p, int y, int x) {
         if (field.board[y][x] == null) {
             return true;
         }
         return field.board[y][x].color != p.color;
+    }
+
+    public static void removeIllegalMovesInCheck(Board field, ChessColor chessColor) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Piece[] row : field.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == chessColor) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        for (Piece piece : pieces) {
+            ArrayList<int[]> movesToRemove = new ArrayList<>();
+            for (int[] move : piece.moves) {
+                Board temp = new Board();
+                temp.board = field.board.clone();
+                temp.setField(piece.posY, piece.posX, null);
+                temp.setField(piece.posY + move[0], piece.posX + move[1], piece);
+                if (isInCheck(temp) == chessColor) {
+                    movesToRemove.add(move);
+                }
+            }
+            for (int[] move : movesToRemove) {
+                piece.moves.remove(move);
+            }
+        }
     }
 }

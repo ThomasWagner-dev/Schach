@@ -34,6 +34,11 @@ public class GameManager {
                 }
             }
         }
+        if (MovesetGenerator.isInCheck(this.board) == ChessColor.BLACK) {
+            MovesetGenerator.removeIllegalMovesInCheck(board, ChessColor.BLACK);
+        } else if (MovesetGenerator.isInCheck(this.board) == ChessColor.WHITE) {
+            MovesetGenerator.removeIllegalMovesInCheck(board, ChessColor.WHITE);
+        }
     }
 
     public void movePiece(int y, int x, int y2, int x2) {

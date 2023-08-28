@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -61,6 +60,24 @@ public class MovesetGenerator {
                 }
             }
         }
+        //check if castle
+        //check if rook is on A1/A8 if white/black
+        if (piece.color == ChessColor.WHITE) {
+            if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
+                //removeMoveFromArraylist(theoreticalMoves, new int[]{-2, 0});
+            }
+            if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
+                //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});
+            }
+        } else {
+            if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
+                //removeMoveFromArraylist(theoreticalMoves, new int[]{-2, 0});
+            }
+            if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
+                //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});
+            }
+        }
+
         piece.moves = rookMoves;
     }
 
@@ -158,6 +175,67 @@ public class MovesetGenerator {
                 removeMoveFromArraylist(theoreticalMoves, move);
             }
         }
+
+        piece.moves=theoreticalMoves;
+    }
+
+    private void generateQueenMoves(Piece piece){
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        //add up moves
+        for(int y = 0; y<7; y++){
+            theoreticalMoves.add(new int[]{0, y});
+        }
+        //add down moves
+        for(int y = 0; y<7; y++){
+            theoreticalMoves.add(new int[]{0, -y});
+        }
+        //add right moves
+        for(int x = 0; x<7; x++){
+            theoreticalMoves.add(new int[]{x,0});
+        }
+        //add left moves
+        for(int x = 0; x<7; x++){
+            theoreticalMoves.add(new int[]{x,0});
+        }
+        //add up right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,i});
+        }
+        //add down right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,-i});
+        }
+        //add down left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,-i});
+        }
+        //add up left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,i});
+        }
+        piece.moves=theoreticalMoves;
+    }
+
+
+    private void gernerateBishopMooves(Piece piece){
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        //add up right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,i});
+        }
+        //add down right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,-i});
+        }
+        //add down left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,-i});
+        }
+        //add up left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,i});
+        }
+        piece.moves=theoreticalMoves;
     }
 
     private void generatePawnMoves(Piece piece) {
@@ -191,6 +269,7 @@ public class MovesetGenerator {
             }
         });
     }
+
 
     public ChessColor isInCheck(Board field, ChessColor color) {
         ArrayList<Piece> pieces = new ArrayList<>();

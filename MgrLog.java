@@ -6,8 +6,14 @@ public class MgrLog {
     public String event;
     public String site;
     public String date;
-    public List<String> moves = new ArrayList<>();
+    public ArrayList<String> moves = new ArrayList<>();
 
+    // Add Zug mit Zugnummer und Zeit auf der Uhr
+    public void addMove(int moveNumber, String move, String timeOnClock) {
+        String formattedMove = String.format("%d. %s {%%clk %s}", moveNumber, move, timeOnClock);
+        moves.add(formattedMove);
+    }
+    // Import Game in PGN Format aus einer Datei
     public void importPGNGame(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -33,6 +39,7 @@ public class MgrLog {
                         for (String move : moves) {
                             move = move.trim();
                             if (!move.isEmpty()) {
+                                // Entfernen von Zeitstempeln und Hinzufügen bereinigter Züge zur Liste
                                 String sanitizedMove = move.replaceAll("\\{[^}]*\\}", "").trim();
                                 this.moves.add(sanitizedMove);
                             }
@@ -42,15 +49,20 @@ public class MgrLog {
             }
         }
     }
+    public void addMove(String move){
+
+    }
 
     public void exportToCustomFormat(String outputFilename) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(outputFilename))) {
-            writer.println("Event: " + event);
-            writer.println("Site: "  + site);
-            writer.println("Date: "  + date);
-            writer.println("Moves:");
-            for (String move : moves) {
-                writer.println(move);
+            if (!moves.isEmpty ()) {
+                writer.println ("Event: " + event);
+                writer.println ("Site: " + site);
+                writer.println ("Date: " + date);
+                writer.println ("Moves:");
+                for (String move : moves) {
+                    writer.println (move);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -11,6 +11,7 @@ public class GameManager {
         this.gui = new SchachGUI();
         this.gui.updateSchachbrett(this.board.board);
         this.gameState = GameState.STANDBY;
+        startGame();
     }
 
     public void startGame() {

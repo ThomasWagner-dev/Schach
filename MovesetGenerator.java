@@ -22,6 +22,11 @@ public class MovesetGenerator {
             case ROOK:
                 break;
         }
+        for (int[] moves: piece.moves) {
+            if(!canPieceMoveTo(piece, piece.posX + moves[0], piece.posY + moves[1])) {
+                removeMoveFromArraylist(piece.moves, moves);
+            }
+        }
     }
 
     private void generateKingMoves(Piece piece) {
@@ -241,10 +246,6 @@ public class MovesetGenerator {
             }
         }
         return null;
-    }
-
-    public boolean isOnBoard(int x, int y) {
-        return x >= 0 && x <= 7 && y >= 0 && y <= 7;
     }
 
     public boolean canPieceMoveTo(Piece p, int x, int y) {

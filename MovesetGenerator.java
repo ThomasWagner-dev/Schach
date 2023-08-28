@@ -63,8 +63,8 @@ public class MovesetGenerator {
         //check if castle
         //check if rook is on A1/A8 if white/black
         if (piece.color == ChessColor.WHITE) {
-            if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
-                //removeMoveFromArraylist(theoreticalMoves, new int[]{-2, 0});
+            if (((piece.posX == 0 && piece.posY == 0)||(piece.posX == 8 && piece.posY == 0))&&piece.moved==false&&field.getPiece(4,0).moved==false) {
+                rookMoves.add(new int[]{0,3});
             }
             if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
                 //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});

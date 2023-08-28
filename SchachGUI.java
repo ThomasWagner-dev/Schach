@@ -35,7 +35,6 @@ public class SchachGUI extends JFrame {
         schachbrettPanel.setPreferredSize(new Dimension(CELL_SIZE * SIZE, CELL_SIZE * SIZE));
 
         initializeSchachbrett();
-        updateSchachbrett();
 
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
@@ -65,7 +64,7 @@ public class SchachGUI extends JFrame {
         }
     }
 
-    private void updateSchachbrett() {
+    public void updateSchachbrett(Piece[][] board) {
         String[][] schachbrett = {
                 {"turm_w.png", "sprienger_w.png", "laeufer_w.png", "dame_w.png", "koenig_w.png", "laeufer_w.png", "sprienger_w.png", "turm_w.png"},
                 {"bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png"},

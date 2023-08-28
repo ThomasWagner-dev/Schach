@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -5,7 +6,7 @@ public class MovesetGenerator {
     private Board field;
 
     public void generateMoves(Piece piece, Board field) {
-        this.field = field;
+        field = field;
         switch (piece.piecetype) {
             case KING:
 
@@ -240,5 +241,16 @@ public class MovesetGenerator {
             }
         }
         return null;
+    }
+
+    public boolean isOnBoard(int x, int y) {
+        return x >= 0 && x <= 7 && y >= 0 && y <= 7;
+    }
+
+    public boolean canPieceMoveTo(Piece p, int x, int y) {
+        if (field.board[x][y] == null) {
+            return true;
+        }
+        return field.board[x][y].color != p.color;
     }
 }

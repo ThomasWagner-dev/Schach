@@ -8,7 +8,7 @@ import java.io.IOException;
 public class SchachGUI extends JFrame {
     private final int SIZE = 8;
     private final int CELL_SIZE = 80;
-    private final String IMAGE_PATH = "./assets/";
+    private final String IMAGE_PATH = "./assets";
 
     private final String[] FIGUREN_BILDER = {"rook", "knight", "bishop", "king", "queen", "pawn"};
 
@@ -86,6 +86,7 @@ public class SchachGUI extends JFrame {
                 if (!bildDatei.isEmpty()) {
                     String imagePath = IMAGE_PATH + File.separator + bildDatei;
                     try {
+                        System.out.println(imagePath);
                         BufferedImage originalImage = ImageIO.read(new File(imagePath));
                         Image scaledImage = originalImage.getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
                         ImageIcon imageIcon = new ImageIcon(scaledImage);
@@ -129,9 +130,9 @@ public class SchachGUI extends JFrame {
                     break;
             }
             bildDatei += " " + (board[y][x].color == ChessColor.WHITE ? "w" : "b");
-            bildDatei += " " + ((y + x) % 2 == 0 ? "w" : "b");
+            bildDatei += " " + ((y + x) % 2 == 0 ? "w.png" : "b.png");
         } else {
-            bildDatei = (y + x) % 2 == 0 ? "white" : "black";
+            bildDatei = (y + x) % 2 == 0 ? "whiteField.png" : "blackField.png";
         }
         return bildDatei;
     }

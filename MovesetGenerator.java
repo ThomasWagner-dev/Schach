@@ -217,7 +217,7 @@ public class MovesetGenerator {
     }
 
 
-    private void gernerateBishopMoves(Piece piece){
+    private void generateBishopMoves(Piece piece){
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
         //add up right moves
         for(int i = 0; i<7; i++){

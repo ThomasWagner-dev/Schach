@@ -86,7 +86,6 @@ public class SchachGUI extends JFrame {
                 if (!bildDatei.isEmpty()) {
                     String imagePath = IMAGE_PATH + File.separator + bildDatei;
                     try {
-                        System.out.println(imagePath);
                         BufferedImage originalImage = ImageIO.read(new File(imagePath));
                         Image scaledImage = originalImage.getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
                         ImageIcon imageIcon = new ImageIcon(scaledImage);

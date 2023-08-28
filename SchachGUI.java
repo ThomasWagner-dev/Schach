@@ -12,15 +12,14 @@ public class SchachGUI extends JFrame {
 
     private final String[] WEISS_FIGUREN_BILDER = {
             "turm_w.png", "sprienger_w.png", "laeufer_w.png", "koenig_w.png",
-            "dame_w.png", "laeufer_w.png", "sprienger_w.png", "turm_w.png"
+            "dame_w.png", "bauer_w.png"
     };
 
     private final String[] SCHWARZ_FIGUREN_BILDER = {
             "turm_s.png", "sprienger_s.png", "laeufer_s.png", "koenig_s.png",
-            "dame_s.png", "laeufer_s.png", "sprienger_s.png", "turm_s.png"
+            "dame_s.png", "bauer_s.png"
     };
-    private final String BAUERN_BILD_W = "bauer_w.png";
-    private final String BAUERN_BILD_S = "bauer_s.png";
+
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
 
@@ -66,15 +65,42 @@ public class SchachGUI extends JFrame {
 
     public void updateSchachbrett(Piece[][] board) {
         String[][] schachbrett = {
-                {"turm_w.png", "sprienger_w.png", "laeufer_w.png", "dame_w.png", "koenig_w.png", "laeufer_w.png", "sprienger_w.png", "turm_w.png"},
-                {"bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png", "bauer_w.png"},
                 {"", "", "", "", "", "", "", ""},
                 {"", "", "", "", "", "", "", ""},
                 {"", "", "", "", "", "", "", ""},
                 {"", "", "", "", "", "", "", ""},
-                {"bauer_s.png", "bauer_s.png", "bauer_s.png", "bauer_s.png", "bauer_s.png", "bauer_s.png", "bauer_s.png", "bauer_s.png"},
-                {"turm_s.png", "sprienger_s.png", "laeufer_s.png", "dame_s.png", "koenig_s.png", "laeufer_s.png", "sprienger_s.png", "turm_s.png"}
+                {"", "", "", "", "", "", "", ""},
+                {"", "", "", "", "", "", "", ""},
+                {"", "", "", "", "", "", "", ""},
+                {"", "", "", "", "", "", "", ""}
         };
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board[y].length; x++) {
+                String bildDatei = "";
+                switch (board[y][x].piecetype) {
+                    case ROOK:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[0] : SCHWARZ_FIGUREN_BILDER[0];
+                        break;
+                    case KNIGHT:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[1] : SCHWARZ_FIGUREN_BILDER[1];
+                        break;
+                    case BISHOP:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[2] : SCHWARZ_FIGUREN_BILDER[2];
+                        break;
+                    case KING:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[3] : SCHWARZ_FIGUREN_BILDER[3];
+                        break;
+                    case QUEEN:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[4] : SCHWARZ_FIGUREN_BILDER[4];
+                        break;
+                    case PAWN:
+                        bildDatei = board[y][x].color == ChessColor.WHITE ? WEISS_FIGUREN_BILDER[5] : SCHWARZ_FIGUREN_BILDER[5];
+                        break;
+                }
+                schachbrett[y][x] = bildDatei;
+            }
+            System.out.println();
+        }
 
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {

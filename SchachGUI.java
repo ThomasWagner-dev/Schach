@@ -35,6 +35,8 @@ public class SchachGUI extends JFrame {
         add(schachbrettPanel, BorderLayout.CENTER);
         add(infoPanel, BorderLayout.EAST);
 
+        initializeRowNumbers();
+        initializeColumnLetters();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -43,6 +45,7 @@ public class SchachGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(SchachGUI::new);
     }
+
 
     private void initializeSchachbrett() {
         for (int row = 0; row < SIZE; row++) {
@@ -58,6 +61,7 @@ public class SchachGUI extends JFrame {
             }
         }
     }
+
 
     public void updateSchachbrett(Piece[][] board) {
         for (int row = 0; row < SIZE; row++) {
@@ -87,13 +91,38 @@ public class SchachGUI extends JFrame {
         }
     }
 
+
+    private void initializeRowNumbers() {
+        JPanel rowNumbersPanel = new JPanel(new GridLayout(SIZE, 1));
+        for (int row = SIZE; row >= 1; row--) {
+            JLabel label = new JLabel(String.valueOf(row), SwingConstants.CENTER);
+            rowNumbersPanel.add(label);
+        }
+        add(rowNumbersPanel, BorderLayout.WEST);
+    }
+
+
+    private void initializeColumnLetters() {
+        JPanel columnLettersPanel = new JPanel(new GridLayout(1, SIZE));
+        char[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+        for (int col = 0; col < SIZE; col++) {
+            JLabel label = new JLabel(String.valueOf(letters[col]), SwingConstants.CENTER);
+            columnLettersPanel.add(label);
+        }
+        columnLettersPanel.add(new JLabel(""));
+        columnLettersPanel.add(new JLabel(""));
+        columnLettersPanel.add(new JLabel(""));
+
+        add(columnLettersPanel, BorderLayout.NORTH);
+    }
+
     private String getBildDatei(Piece[][] board, int y, int x) {
         String bildDatei = "";
         if (board[y][x] != null) {
             switch (board[y][x].piecetype) {
                 case ROOK:
                     bildDatei = FIGUREN_BILDER[0];
-                    break;
+                break;
                 case KNIGHT:
                     bildDatei = FIGUREN_BILDER[1];
                     break;
@@ -132,6 +161,6 @@ public class SchachGUI extends JFrame {
     }
 
     private Color getCellColor(int row, int col) {
-        return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(139, 69, 19);
+        return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(0, 0, 0);
     }
 }

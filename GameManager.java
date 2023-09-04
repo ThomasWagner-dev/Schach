@@ -20,13 +20,13 @@ public class GameManager {
 
     public void move(int y, int x, int y2, int x2) {
         if(board.getPiece(y, x).piecetype == Piecetype.KING){
-            if(x2==-2){
+            if(x2-x==-2){
                 if(board.getPiece(y, x).color== ChessColor.WHITE) {
                     move(0, 0, 0, 3);
                 }else{
                     move(7, 0, 0, 3);
                 }
-            }else{
+            }else if(x2-x==2){
                 if(board.getPiece(y, x).color== ChessColor.WHITE) {
                     move(0, 0, 0, -2);
                 }else{

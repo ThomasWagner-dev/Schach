@@ -44,10 +44,10 @@ public class MovesetGenerator {
                 if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
                     removeMoveFromArraylist(piece.moves, new int[]{2, 0});
                 }
-                if (isPathClearHor(field,piece,0){
+                if (isPathClearHor(field,piece,0)){
                     removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
                 }
-                if (isPathClearHor(field,piece,7){
+                if (isPathClearHor(field,piece,7)){
                     removeMoveFromArraylist(piece.moves, new int[]{2, 0});
                 }
             } else {
@@ -57,10 +57,10 @@ public class MovesetGenerator {
                 if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
                     removeMoveFromArraylist(piece.moves, new int[]{2, 0});
                 }
-                if (isPathClearHor(field,piece,0){
+                if (isPathClearHor(field,piece,0)){
                     removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
                 }
-                if (isPathClearHor(field,piece,7){
+                if (isPathClearHor(field,piece,7)){
                     removeMoveFromArraylist(piece.moves, new int[]{2, 0});
                 }
             }

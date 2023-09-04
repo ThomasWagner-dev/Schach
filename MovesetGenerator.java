@@ -36,19 +36,33 @@ public class MovesetGenerator {
         removeBlockedMoves(field, piece);
         removeAllyAttacks(field, piece);
         //check if rook is on A1/A8 if white/black
-        if (piece.color == ChessColor.WHITE) {
-            if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-            }
-            if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-            }
-        } else {
-            if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-            }
-            if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+        if(piece.moved!=true) {
+            if (piece.color == ChessColor.WHITE) {
+                if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
+                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+                }
+                if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
+                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+                }
+                if (isPathClearHor(field,piece,0){
+                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+                }
+                if (isPathClearHor(field,piece,7){
+                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+                }
+            } else {
+                if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
+                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+                }
+                if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
+                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+                }
+                if (isPathClearHor(field,piece,0){
+                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+                }
+                if (isPathClearHor(field,piece,7){
+                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+                }
             }
         }
         // Check for Check

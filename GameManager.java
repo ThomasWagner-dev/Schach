@@ -8,7 +8,7 @@ public class GameManager {
         board.buildBoard(ChessColor.WHITE);
 
         this.timer = new Timer();
-        this.gui = new SchachGUI();
+        this.gui = new SchachGUI(this);
         this.gui.updateSchachbrett(this.board.board);
         this.gameState = GameState.STANDBY;
         startGame();
@@ -19,6 +19,7 @@ public class GameManager {
     }
 
     public void move(int y, int x, int y2, int x2) {
+        System.out.println("X: "+ x + " X2: " + x2  + " Y: " + y + " Y2: " + y2);
         if(board.getPiece(y, x).piecetype == Piecetype.KING){
             if(x2-x==-2){
                 if(board.getPiece(y, x).color== ChessColor.WHITE) {

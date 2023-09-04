@@ -24,6 +24,133 @@ public class MovesetGenerator {
                 generateRookMoves(field, piece);
                 break;
         }
+        removeMovesThatLeadToCheck(field, piece);
+    }
+
+    private static void generateKingMoves(Board field, Piece piece) {
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, 0}, {2, 0}};
+        Collections.addAll(theoreticalMoves, temp);
+        piece.moves = theoreticalMoves;
+        removeOOBounds(piece);
+        removeBlockedMoves(field, piece);
+        removeAllyAttacks(field, piece);
+        //check if rook is on A1/A8 if white/black
+        if (piece.color == ChessColor.WHITE) {
+            if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
+                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+            }
+            if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
+                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+            }
+        } else {
+            if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
+                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
+            }
+            if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
+                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
+            }
+        }
+        // Check for Check
+        ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+        for (int[] move : piece.moves) {
+            if (field.isFieldAttackedBy(otherColor, piece.posX + move[0], piece.posY + move[1])) {
+                removeMoveFromArraylist(piece.moves, move);
+            }
+        }
+    }
+
+    private static void generateQueenMoves(Board field, Piece piece){
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        //add up moves
+        for(int y = 0; y<7; y++){
+            theoreticalMoves.add(new int[]{y, 0});
+        }
+        //add down moves
+        for(int y = 0; y<7; y++){
+            theoreticalMoves.add(new int[]{-y, 0});
+        }
+        //add right moves
+        for(int x = 0; x<7; x++){
+            theoreticalMoves.add(new int[]{0,x});
+        }
+        //add left moves
+        for(int x = 0; x<7; x++){
+            theoreticalMoves.add(new int[]{0,-x});
+        }
+        //add up right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,i});
+        }
+        //add down right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,i});
+        }
+        //add down left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,-i});
+        }
+        //add up left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,-i});
+        }
+        piece.moves = theoreticalMoves;
+        removeOOBounds(piece);
+        removeBlockedMoves(field, piece);
+        removeAllyAttacks(field, piece);
+    }
+
+    private static void generatePawnMoves(Board field, Piece piece) {
+        int vorzeichen = 1;
+        if (piece.color == ChessColor.BLACK) {
+            vorzeichen = -1;
+        }
+        ArrayList<int[]> pawnMoves = new ArrayList<>();
+        int[][] temp = {{0, vorzeichen}, {0, 2 * vorzeichen}};
+        Collections.addAll(pawnMoves, temp);
+        if (piece.moved) {
+            removeMoveFromArraylist(pawnMoves, new int[]{0, 2 * vorzeichen});
+        }
+        piece.moves = pawnMoves;
+        removeOOBounds(piece);
+        removeBlockedMoves(field, piece);
+        removeAllyAttacks(field, piece);
+    }
+
+    private static void generateKnightMoves(Board field, Piece piece) {
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        int[][] temp = {
+                {-2, 1}, {-1, 2}, {1, 2}, {2, 1},  // Rechts oben im Uhrzeigersinn
+                {2, -1}, {1, -2}, {-1, -2}, {-2, -1} // Links unten im Uhrzeigersinn
+        };
+        Collections.addAll(theoreticalMoves, temp);
+        piece.moves = theoreticalMoves;
+        removeOOBounds(piece);
+        removeAllyAttacks(field, piece);
+    }
+
+    private static void generateBishopMoves(Board field, Piece piece){
+        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
+        //add up right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,i});
+        }
+        //add down right moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{i,-i});
+        }
+        //add down left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,-i});
+        }
+        //add up left moves
+        for(int i = 0; i<7; i++){
+            theoreticalMoves.add(new int[]{-i,i});
+        }
+        piece.moves = theoreticalMoves;
+        removeOOBounds(piece);
+        removeBlockedMoves(field, piece);
+        removeAllyAttacks(field, piece);
     }
 
     private static void generateRookMoves(Board field, Piece piece) {
@@ -123,122 +250,6 @@ public class MovesetGenerator {
         return true;
     }
 
-    private static void generateKingMoves(Board field, Piece piece) {
-        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
-        int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, 0}, {2, 0}};
-        Collections.addAll(theoreticalMoves, temp);
-        piece.moves = theoreticalMoves;
-        removeOOBounds(piece);
-        removeBlockedMoves(field, piece);
-        removeAllyAttacks(field, piece);
-        //check if rook is on A1/A8 if white/black
-        if (piece.color == ChessColor.WHITE) {
-            if (!(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-            }
-            if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-            }
-        } else {
-            if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-            }
-            if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
-                removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-            }
-        }
-        // Check for Check
-        ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
-        for (int[] move : piece.moves) {
-            if (field.isFieldAttackedBy(otherColor, piece.posX + move[0], piece.posY + move[1])) {
-                removeMoveFromArraylist(piece.moves, move);
-            }
-        }
-
-    }
-
-    private static void generateQueenMoves(Board field, Piece piece){
-        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
-        //add up moves
-        for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{y, 0});
-        }
-        //add down moves
-        for(int y = 0; y<7; y++){
-            theoreticalMoves.add(new int[]{-y, 0});
-        }
-        //add right moves
-        for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{0,x});
-        }
-        //add left moves
-        for(int x = 0; x<7; x++){
-            theoreticalMoves.add(new int[]{0,-x});
-        }
-        //add up right moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,i});
-        }
-        //add down right moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,i});
-        }
-        //add down left moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,-i});
-        }
-        //add up left moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,-i});
-        }
-        piece.moves = theoreticalMoves;
-        removeOOBounds(piece);
-        removeBlockedMoves(field, piece);
-        removeAllyAttacks(field, piece);
-    }
-
-
-    private static void generateBishopMoves(Board field, Piece piece){
-        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
-        //add up right moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,i});
-        }
-        //add down right moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{i,-i});
-        }
-        //add down left moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,-i});
-        }
-        //add up left moves
-        for(int i = 0; i<7; i++){
-            theoreticalMoves.add(new int[]{-i,i});
-        }
-        piece.moves = theoreticalMoves;
-        removeOOBounds(piece);
-        removeBlockedMoves(field, piece);
-        removeAllyAttacks(field, piece);
-    }
-
-    private static void generatePawnMoves(Board field, Piece piece) {
-        int vorzeichen = 1;
-        if (piece.color == ChessColor.BLACK) {
-            vorzeichen = -1;
-        }
-        ArrayList<int[]> pawnMoves = new ArrayList<>();
-        int[][] temp = {{0, vorzeichen}, {0, 2 * vorzeichen}};
-        Collections.addAll(pawnMoves, temp);
-        if (piece.moved) {
-            removeMoveFromArraylist(pawnMoves, new int[]{0, 2 * vorzeichen});
-        }
-        piece.moves = pawnMoves;
-        removeOOBounds(piece);
-        removeBlockedMoves(field, piece);
-        removeAllyAttacks(field, piece);
-    }
-
     private static void removeAllyAttacks(Board field, Piece p) {
         ArrayList<int[]> movesToRemove = new ArrayList<>();
 
@@ -282,16 +293,42 @@ public class MovesetGenerator {
         }
     }
 
-    private static void generateKnightMoves(Board field, Piece piece) {
-        ArrayList<int[]> theoreticalMoves = new ArrayList<>();
-        int[][] temp = {
-                {-2, 1}, {-1, 2}, {1, 2}, {2, 1},  // Rechts oben im Uhrzeigersinn
-                {2, -1}, {1, -2}, {-1, -2}, {-2, -1} // Links unten im Uhrzeigersinn
-        };
-        Collections.addAll(theoreticalMoves, temp);
-        piece.moves = theoreticalMoves;
-        removeOOBounds(piece);
-        removeAllyAttacks(field, piece);
+    public static void removeMovesThatLeadToCheck(Board field, Piece p){
+        ArrayList<int[]> movesToRemove = new ArrayList<>();
+        for (int[] move : p.moves) {
+            if (wouldMoveLeadToCheck(field, p.color, p, p.posY + move[0], p.posX + move[1])) {
+                movesToRemove.add(move);
+            }
+        }
+        for (int[] move : movesToRemove) {
+            p.moves.remove(move);
+        }
+    }
+
+    public static void removeIllegalMovesInCheck(Board field, ChessColor chessColor) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Piece[] row : field.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == chessColor) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        for (Piece piece : pieces) {
+            ArrayList<int[]> movesToRemove = new ArrayList<>();
+            for (int[] move : piece.moves) {
+                Board temp = new Board();
+                temp.board = field.board.clone();
+                temp.setField(piece.posY, piece.posX, null);
+                temp.setField(piece.posY + move[0], piece.posX + move[1], piece);
+                if (isInCheck(temp) == chessColor) {
+                    movesToRemove.add(move);
+                }
+            }
+            for (int[] move : movesToRemove) {
+                piece.moves.remove(move);
+            }
+        }
     }
 
     private static void removeMoveFromArraylist(ArrayList<int[]> list, int[] move) {
@@ -353,31 +390,5 @@ public class MovesetGenerator {
             return true;
         }
         return field.board[y][x].color != p.color;
-    }
-
-    public static void removeIllegalMovesInCheck(Board field, ChessColor chessColor) {
-        ArrayList<Piece> pieces = new ArrayList<>();
-        for (Piece[] row : field.board) {
-            for (Piece piece : row) {
-                if (piece != null && piece.color == chessColor) {
-                    pieces.add(piece);
-                }
-            }
-        }
-        for (Piece piece : pieces) {
-            ArrayList<int[]> movesToRemove = new ArrayList<>();
-            for (int[] move : piece.moves) {
-                Board temp = new Board();
-                temp.board = field.board.clone();
-                temp.setField(piece.posY, piece.posX, null);
-                temp.setField(piece.posY + move[0], piece.posX + move[1], piece);
-                if (isInCheck(temp) == chessColor) {
-                    movesToRemove.add(move);
-                }
-            }
-            for (int[] move : movesToRemove) {
-                piece.moves.remove(move);
-            }
-        }
     }
 }

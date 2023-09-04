@@ -17,8 +17,10 @@ public class SchachGUI extends JFrame {
 
     private JButton selectedButton = null;
     private Color originalButtonColor;
+  private  GameManager gameManager;
 
-    public SchachGUI() {
+    public SchachGUI(GameManager gameManager) {
+        this.gameManager = gameManager;
         setTitle("Schachspiel");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -147,18 +149,30 @@ public class SchachGUI extends JFrame {
         return bildDatei;
     }
 
-    private void handleCellClick(JButton button) {
+ private void handleCellClick(JButton button) {
         if (selectedButton == null) {
             selectedButton = button;
             originalButtonColor = button.getBackground();
             button.setBackground(Color.YELLOW);
         } else {
+            String positionFrom = selectedButton.getName();
+            String positionTo = button.getName();
+            String[] fromParts = positionFrom.split(",");
+            int x = Integer.parseInt(fromParts[0]);
+            int x1 = Integer.parseInt(fromParts[1]);
+            String[] toParts = positionTo.split(",");
+            int y = Integer.parseInt(toParts[0]);
+            int y1 = Integer.parseInt(toParts[1]);
+            System.out.println("Piece moved from: " + positionFrom + " to: " + positionTo);
+            gameManager.move(y,x,y1,x1);
+
             button.setIcon(selectedButton.getIcon());
             selectedButton.setIcon(null);
             selectedButton.setBackground(originalButtonColor);
             selectedButton = null;
         }
     }
+
 
     private Color getCellColor(int row, int col) {
         return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(0, 0, 0);

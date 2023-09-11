@@ -20,8 +20,12 @@ public class GameManager {
 
     public void move(int y, int x, int y2, int x2) {
         System.out.println("X: "+ x + " X2: " + x2  + " Y: " + y + " Y2: " + y2);
-        if (this.board.board[y][x] == null) {
+        if (this.board.board[y2][x2] == null) {
             return;
+        }
+        System.out.println("Piece: " + this.board.board[y2][x2].piecetype);
+        for (int[] move : this.board.board[y][x].moves) {
+            System.out.println("Move: " + move[0] + " " + move[1]);
         }
         /*if(board.getPiece(y, x).piecetype == Piecetype.KING){
             if(x2-x==-2){

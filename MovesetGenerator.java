@@ -124,10 +124,10 @@ public class MovesetGenerator {
             vorzeichen = -1;
         }
         ArrayList<int[]> pawnMoves = new ArrayList<>();
-        int[][] temp = {{0, vorzeichen}, {0, 2 * vorzeichen}};
+        int[][] temp = {{vorzeichen, 0}, {2 * vorzeichen, 0}};
         Collections.addAll(pawnMoves, temp);
         if (piece.moved) {
-            removeMoveFromArraylist(pawnMoves, new int[]{0, 2 * vorzeichen});
+            removeMoveFromArraylist(pawnMoves, new int[]{2 * vorzeichen, 0});
         }
         piece.moves = pawnMoves;
         removeOOBounds(piece);
@@ -272,7 +272,7 @@ public class MovesetGenerator {
         ArrayList<int[]> movesToRemove = new ArrayList<>();
 
         for (int[] move : p.moves) {
-            if (!isAllyPiece(field, p, p.posX + move[1], p.posY + move[0])) {
+            if (isAllyPiece(field, p,p.posY + move[0], p.posX + move[1])) {
                 movesToRemove.add(move);
             }
         }
@@ -405,7 +405,7 @@ public class MovesetGenerator {
 
     public static boolean isAllyPiece(Board field, Piece p, int y, int x) {
         if (field.board[y][x] == null) {
-            return true;
+            return false;
         }
         return field.board[y][x].color != p.color;
     }

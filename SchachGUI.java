@@ -151,21 +151,127 @@ public class SchachGUI extends JFrame {
     private void handleCellClick(JButton button) {
         if (button == null) {
             return;
-        } else {
-            String positionFrom = button.getName();
-            String[] fromParts = positionFrom.split(",");
-            int x = Integer.parseInt(fromParts[0]);
-            int y = Integer.parseInt(fromParts[1]);
-            System.out.println("Piece moved from: " + positionFrom + " to: " + positionFrom);
-            moveClear.add(y);
-            moveClear.add(x);
         }
+
+        String positionFrom = button.getName();
+        String[] fromParts = positionFrom.split(",");
+        int x = Integer.parseInt(fromParts[1]);
+        int y = Integer.parseInt(fromParts[0]);
+        System.out.println("Piece moved from: " + positionFrom + " to: " + positionFrom);
+        moveClear.add(y);
+        moveClear.add(x);
+
         if (moveClear.size() == 4) {
             gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
+            updateSchachbrett(gameManager.board.board);
+            System.out.println("clear");
             moveClear.clear();
+        } else{
+            highlightPossibleMoves(gameManager.board.board[y][x]);
         }
+
+
     }
 
+
+    private void highlightPossibleMoves(Piece piece) {
+        for (int[] move :piece.moves) {
+            int newX = piece.posX + move[1];
+            int newY = piece.posY + move[0];
+
+            JButton targetButton = getButtonAtPosition(newX, newY);
+
+            if (targetButton == null) {
+                return;
+            }
+
+            if (gameManager.board.board[newY][newX] == null) {
+                String bildDatei = "blueField.png";
+                String imagePath = IMAGE_PATH + File.separator + bildDatei;
+                try {
+                    BufferedImage originalImage = ImageIO.read(new File(imagePath));
+                    Image scaledImage = originalImage.getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
+                    ImageIcon imageIcon = new ImageIcon(scaledImage);
+
+                    targetButton.setIcon(imageIcon);
+                    targetButton.setContentAreaFilled(false);
+                    targetButton.setBorderPainted(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.err.println("Error loading image: " + bildDatei);
+                }
+
+            } else {
+                String bildDatei = getHighlightImg(gameManager.board.board[newY][newX]);
+                String imagePath = IMAGE_PATH + File.separator + bildDatei;
+                try {
+                    BufferedImage originalImage = ImageIO.read(new File(imagePath));
+                    Image scaledImage = originalImage.getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
+                    ImageIcon imageIcon = new ImageIcon(scaledImage);
+
+                    targetButton.setIcon(imageIcon);
+                    targetButton.setContentAreaFilled(false);
+                    targetButton.setBorderPainted(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.err.println("Error loading image: " + bildDatei);
+                }
+            }
+        }
+        }
+
+
+    private String getHighlightImg(Piece piece ){
+        String bildDatei = "";
+        switch (piece.piecetype){
+
+            case ROOK:
+                bildDatei = FIGUREN_BILDER[0];
+                break;
+            case KNIGHT:
+                bildDatei = FIGUREN_BILDER[1];
+                break;
+            case BISHOP:
+                bildDatei = FIGUREN_BILDER[2];
+                break;
+            case KING:
+                bildDatei = FIGUREN_BILDER[3];
+                break;
+            case QUEEN:
+                bildDatei = FIGUREN_BILDER[4];
+                break;
+            case PAWN:
+                bildDatei = FIGUREN_BILDER[5];
+                break;
+        }
+        bildDatei += " " + (piece.color == ChessColor.WHITE ? "w" : "b");
+        bildDatei += " " + ("h.png");
+
+        return bildDatei;
+    }
+
+    private boolean isValidMove(int x, int y) {
+        return x >= 0 && x < SIZE && y >= 0 && y < SIZE;
+    }
+
+    private JButton getButtonAtPosition(int x, int y) {
+        Component[] components = schachbrettPanel.getComponents();
+
+        for (Component component : components) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                String[] positionParts = button.getName().split(",");
+                int buttonX = Integer.parseInt(positionParts[1]);
+                int buttonY = Integer.parseInt(positionParts[0]);
+
+                if (buttonX == x && buttonY == y) {
+                    return button;
+                }
+            }
+        }
+
+        return null;
+    }
 
     private Color getCellColor(int row, int col) {
         return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(0, 0, 0);

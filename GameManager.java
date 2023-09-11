@@ -20,7 +20,10 @@ public class GameManager {
 
     public void move(int y, int x, int y2, int x2) {
         System.out.println("X: "+ x + " X2: " + x2  + " Y: " + y + " Y2: " + y2);
-        if(board.getPiece(y, x).piecetype == Piecetype.KING){
+        if (this.board.board[y][x] == null) {
+            return;
+        }
+        /*if(board.getPiece(y, x).piecetype == Piecetype.KING){
             if(x2-x==-2){
                 if(board.getPiece(y, x).color== ChessColor.WHITE) {
                     move(0, 0, 0, 3);
@@ -34,12 +37,24 @@ public class GameManager {
                     move(7, 0, 0, -2);
                 }
             }
-        }
+        }*/
 
         if (this.gameState == GameState.WHITE_TURN) {
+            if (this.board.board[y][x].color == ChessColor.BLACK) {
+                return;
+            }
+            if (!isValidMove(y, x, y2, x2)) {
+                return;
+            }
             this.movePiece(y, x, y2, x2);
             this.gameState = GameState.BLACK_TURN;
         } else if (this.gameState == GameState.BLACK_TURN) {
+            if (this.board.board[y][x].color == ChessColor.WHITE) {
+                return;
+            }
+            if (!isValidMove(y, x, y2, x2)) {
+                return;
+            }
             this.movePiece(y, x, y2, x2);
             this.gameState = GameState.WHITE_TURN;
         }
@@ -62,5 +77,25 @@ public class GameManager {
         Piece piece = this.board.board[x][y];
         this.board.setField(y, x, null);
         this.board.setField(y2, x2, piece);
+        piece.moved = true;
+        piece.posY = y2;
+        piece.posX = x2;
+    }
+
+    public boolean isValidMove(int y, int x, int y2, int x2) {
+        Piece piece = this.board.board[y][x];
+        if (piece == null) {
+            return false;
+        }
+        if (piece.color != (this.gameState == GameState.WHITE_TURN?ChessColor.WHITE:ChessColor.BLACK)) {
+            return false;
+        }
+        for (int i = 0; i < piece.moves.size(); i++) {
+            int[] move = piece.moves.get(i);
+            if (move[0] == y - y2 && move[1] == x - x2) {
+                return true;
+            }
+        }
+        return false;
     }
 }

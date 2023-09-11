@@ -119,6 +119,9 @@ public class MovesetGenerator {
     }
 
     private static void generatePawnMoves(Board field, Piece piece) {
+        if (piece.moved) {
+            System.out.println("Pawn moved");
+        }
         int vorzeichen = 1;
         if (piece.color == ChessColor.BLACK) {
             vorzeichen = -1;
@@ -235,31 +238,31 @@ public class MovesetGenerator {
         return true;
     }
 
-    public static  boolean isPathClearDiag(Board field, Piece p, int x, int y) {
+    public static  boolean isPathClearDiag(Board field, Piece p, int y, int x) {
         if (p.posX > x) {
             if (p.posY > y) {
-                for (int i = 1; p.posX + i < x; i++) {
-                    if (field.board[p.posY + i][p.posX + i] != null) {
+                for (int i = 1; p.posX - i > x; i++) {
+                    if (field.board[p.posY - i][p.posX - i] != null) {
                         return false;
                     }
                 }
             } else {
-                for (int i = 1; p.posX + i < x; i++) {
-                    if (field.board[p.posY - i][p.posX + i] != null) {
+                for (int i = 1; p.posX - i > x; i++) {
+                    if (field.board[p.posY + i][p.posX - i] != null) {
                         return false;
                     }
                 }
             }
         } else {
             if (p.posY > y) {
-                for (int i = 1; p.posX - i > x; i++) {
-                    if (field.board[p.posY + i][p.posX - i] != null) {
+                for (int i = 1; p.posX + i < x; i++) {
+                    if (field.board[p.posY - i][p.posX + i] != null) {
                         return false;
                     }
                 }
             } else {
-                for (int i = 1; p.posX - i > x; i++) {
-                    if (field.board[p.posY - i][p.posX - i] != null) {
+                for (int i = 1; p.posX + i < x; i++) {
+                    if (field.board[p.posY + i][p.posX + i] != null) {
                         return false;
                     }
                 }
@@ -290,7 +293,7 @@ public class MovesetGenerator {
             if (move[0] == 0 && !isPathClearHor(field, p, p.posX + move[1])) {
                 movesToRemove.add(move);
             }
-            if (move[0] != 0 && move[1] != 0 && !isPathClearDiag(field, p, p.posX + move[1], p.posY + move[0])) {
+            if (move[0] != 0 && move[1] != 0 && !isPathClearDiag(field, p, p.posY + move[0], p.posX + move[1])) {
                 movesToRemove.add(move);
             }
         }
@@ -324,6 +327,9 @@ public class MovesetGenerator {
     }
 
     public static void removeIllegalMovesInCheck(Board field, ChessColor chessColor) {
+        if (chessColor == null) {
+            return;
+        }
         ArrayList<Piece> pieces = new ArrayList<>();
         for (Piece[] row : field.board) {
             for (Piece piece : row) {
@@ -352,7 +358,7 @@ public class MovesetGenerator {
     private static void removeMoveFromArraylist(ArrayList<int[]> list, int[] move) {
         ArrayList<int[]> movesToRemove = new ArrayList<>();
         list.forEach((p) -> {
-            if (p == move) {
+            if (p[0] == move[0] && p[1] == move[1]) {
                 movesToRemove.add(p);
             }
         });
@@ -407,7 +413,7 @@ public class MovesetGenerator {
         if (field.board[y][x] == null) {
             return false;
         }
-        return field.board[y][x].color != p.color;
+        return field.board[y][x].color == p.color;
     }
 
     public static Piece[][] cloneBoard(Piece[][] board) {

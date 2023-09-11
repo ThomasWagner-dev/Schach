@@ -19,49 +19,19 @@ public class GameManager {
     }
 
     public void move(int y, int x, int y2, int x2) {
-        System.out.println("X: "+ x + " X2: " + x2  + " Y: " + y + " Y2: " + y2);
-        if (this.board.board[y2][x2] == null) {
+        System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
+        if (this.board.board[y][x] == null) {
             return;
         }
-        System.out.println("Piece: " + this.board.board[y2][x2].piecetype);
         for (int[] move : this.board.board[y][x].moves) {
             System.out.println("Move: " + move[0] + " " + move[1]);
         }
-        /*if(board.getPiece(y, x).piecetype == Piecetype.KING){
-            if(x2-x==-2){
-                if(board.getPiece(y, x).color== ChessColor.WHITE) {
-                    move(0, 0, 0, 3);
-                }else{
-                    move(7, 0, 0, 3);
-                }
-            }else if(x2-x==2){
-                if(board.getPiece(y, x).color== ChessColor.WHITE) {
-                    move(0, 0, 0, -2);
-                }else{
-                    move(7, 0, 0, -2);
-                }
-            }
-        }*/
-
-        if (this.gameState == GameState.WHITE_TURN) {
-            if (this.board.board[y][x].color == ChessColor.BLACK) {
-                return;
-            }
-            if (!isValidMove(y, x, y2, x2)) {
-                return;
-            }
-            this.movePiece(y, x, y2, x2);
-            this.gameState = GameState.BLACK_TURN;
-        } else if (this.gameState == GameState.BLACK_TURN) {
-            if (this.board.board[y][x].color == ChessColor.WHITE) {
-                return;
-            }
-            if (!isValidMove(y, x, y2, x2)) {
-                return;
-            }
-            this.movePiece(y, x, y2, x2);
-            this.gameState = GameState.WHITE_TURN;
+        if (!isValidMove(y, x, y2, x2)) {
+            return;
         }
+        this.movePiece(y, x, y2, x2);
+        this.gameState = this.gameState==GameState.WHITE_TURN?GameState.BLACK_TURN:GameState.WHITE_TURN;
+
         this.gui.updateSchachbrett(this.board.board);
         for (int i = 0; i < this.board.board.length; i++) {
             for (int j = 0; j < this.board.board.length; j++) {
@@ -70,15 +40,11 @@ public class GameManager {
                 }
             }
         }
-        if (MovesetGenerator.isInCheck(this.board) == ChessColor.BLACK) {
-            MovesetGenerator.removeIllegalMovesInCheck(board, ChessColor.BLACK);
-        } else if (MovesetGenerator.isInCheck(this.board) == ChessColor.WHITE) {
-            MovesetGenerator.removeIllegalMovesInCheck(board, ChessColor.WHITE);
-        }
+        MovesetGenerator.removeIllegalMovesInCheck(board, MovesetGenerator.isInCheck(this.board));
     }
 
     public void movePiece(int y, int x, int y2, int x2) {
-        Piece piece = this.board.board[x][y];
+        Piece piece = this.board.board[y][x];
         this.board.setField(y, x, null);
         this.board.setField(y2, x2, piece);
         piece.moved = true;
@@ -96,7 +62,7 @@ public class GameManager {
         }
         for (int i = 0; i < piece.moves.size(); i++) {
             int[] move = piece.moves.get(i);
-            if (move[0] == y - y2 && move[1] == x - x2) {
+            if (move[0] == y2 - y && move[1] == x2 - x) {
                 return true;
             }
         }

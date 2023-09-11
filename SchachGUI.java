@@ -21,6 +21,7 @@ public class SchachGUI extends JFrame {
     private JButton selectedButton = null;
     List<Integer> moveClear = new ArrayList<>();
     private GameManager gameManager;
+    Timer timerPanel = new Timer();
 
     public SchachGUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -29,13 +30,14 @@ public class SchachGUI extends JFrame {
 
         schachbrettPanel = new JPanel(new GridLayout(SIZE, SIZE));
         schachbrettPanel.setPreferredSize(new Dimension(CELL_SIZE * SIZE, CELL_SIZE * SIZE));
-
-        initializeSchachbrett();
-
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
 
+        infoPanel.add(timerPanel);
+        initializeSchachbrett();
+        infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
+        infoPanel.setBackground(Color.BLACK);
         setLayout(new BorderLayout());
         add(schachbrettPanel, BorderLayout.CENTER);
         add(infoPanel, BorderLayout.EAST);
@@ -152,7 +154,6 @@ public class SchachGUI extends JFrame {
         if (button == null) {
             return;
         }
-
         String positionFrom = button.getName();
         String[] fromParts = positionFrom.split(",");
         int x = Integer.parseInt(fromParts[1]);
@@ -164,21 +165,28 @@ public class SchachGUI extends JFrame {
         if (moveClear.size() == 4) {
             gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
             updateSchachbrett(gameManager.board.board);
+
+            if (timerPanel.isTimer1Active()) {
+                timerPanel.stopTimer1();
+                timerPanel.startTimer2();
+            } else {
+                timerPanel.stopTimer2();
+                timerPanel.startTimer1();
+            }
+
             System.out.println("clear");
             moveClear.clear();
-        } else{
+        } else {
             highlightPossibleMoves(gameManager.board.board[y][x]);
         }
-
-
     }
+
 
 
     private void highlightPossibleMoves(Piece piece) {
         for (int[] move :piece.moves) {
             int newX = piece.posX + move[1];
             int newY = piece.posY + move[0];
-
             JButton targetButton = getButtonAtPosition(newX, newY);
 
             if (targetButton == null) {

@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchachGUI extends JFrame {
     private final int SIZE = 8;
@@ -16,7 +19,8 @@ public class SchachGUI extends JFrame {
     private final JPanel infoPanel;
 
     private JButton selectedButton = null;
-  private  GameManager gameManager;
+    List<Integer> moveClear = new ArrayList<>();
+    private GameManager gameManager;
 
     public SchachGUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -119,7 +123,7 @@ public class SchachGUI extends JFrame {
             switch (board[y][x].piecetype) {
                 case ROOK:
                     bildDatei = FIGUREN_BILDER[0];
-                break;
+                    break;
                 case KNIGHT:
                     bildDatei = FIGUREN_BILDER[1];
                     break;
@@ -144,21 +148,21 @@ public class SchachGUI extends JFrame {
         return bildDatei;
     }
 
- private void handleCellClick(JButton button) {
-        if (selectedButton == null) {
-            selectedButton = button;
-            button.setBackground(Color.YELLOW);
+    private void handleCellClick(JButton button) {
+        if (button == null) {
+            return;
         } else {
-            String positionFrom = selectedButton.getName();
-            String positionTo = button.getName();
+            String positionFrom = button.getName();
             String[] fromParts = positionFrom.split(",");
             int x = Integer.parseInt(fromParts[0]);
-            int x1 = Integer.parseInt(fromParts[1]);
-            String[] toParts = positionTo.split(",");
-            int y = Integer.parseInt(toParts[0]);
-            int y1 = Integer.parseInt(toParts[1]);
-            System.out.println("Piece moved from: " + positionFrom + " to: " + positionTo);
-            gameManager.move(y,x,y1,x1);
+            int y = Integer.parseInt(fromParts[1]);
+            System.out.println("Piece moved from: " + positionFrom + " to: " + positionFrom);
+            moveClear.add(y);
+            moveClear.add(x);
+        }
+        if (moveClear.size() == 4) {
+            gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
+            moveClear.clear();
         }
     }
 

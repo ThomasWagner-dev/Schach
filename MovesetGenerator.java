@@ -131,10 +131,20 @@ public class MovesetGenerator {
             vorzeichen = -1;
         }
         ArrayList<int[]> pawnMoves = new ArrayList<>();
-        int[][] temp = {{vorzeichen, 0}, {2 * vorzeichen, 0}};
+        int[][] temp = {{vorzeichen, 0}, {2 * vorzeichen, 0}, {vorzeichen, 1},{vorzeichen, -1}};
         Collections.addAll(pawnMoves, temp);
         if (piece.moved) {
             removeMoveFromArraylist(pawnMoves, new int[]{2 * vorzeichen, 0});
+        }
+        boolean yOoBounds = (((piece.posY + vorzeichen) > 7) || ((piece.posY + vorzeichen) < 0));
+        boolean xOoBounds = (((piece.posX + 1) > 7) || ((piece.posX - 1) < 0));
+        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX + 1) == null))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 1});
+        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX - 1) == null))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, -1});
+
+        if ((yOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX) != null)){
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 0});
         }
         piece.moves = pawnMoves;
         removeOOBounds(piece);

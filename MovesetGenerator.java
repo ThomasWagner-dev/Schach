@@ -29,41 +29,45 @@ public class MovesetGenerator {
 
     private static void generateKingMoves(Board field, Piece piece) {
         ArrayList<int[]> theoreticalMoves = new ArrayList<>();
-        int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, 0}, {2, 0}};
+        int[][] temp = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {0, -2}, {0, 2}};
         Collections.addAll(theoreticalMoves, temp);
         piece.moves = theoreticalMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
         removeAllyAttacks(field, piece);
         //check if rook is on A1/A8 if white/black
-        if(!piece.moved) {
-            if (piece.color == ChessColor.WHITE) {
-                if (field.getPiece(0, 0) != null && !(field.getPiece(0, 0).color == ChessColor.WHITE && !field.getPiece(0, 0).moved)) {
-                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-                }
-                if (field.getPiece(7, 0) != null && !(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
-                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-                }
-                if ( isPathClearHor(field,piece,0)){
-                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-                }
-                if (isPathClearHor(field,piece,7)){
-                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-                }
-            } else {
-                if (field.getPiece(0, 7) != null && !(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
-                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-                }
-                if (field.getPiece(7, 7) != null && !(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
-                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-                }
-                if (isPathClearHor(field,piece,0)){
-                    removeMoveFromArraylist(piece.moves, new int[]{-2, 0});
-                }
-                if (isPathClearHor(field,piece,7)){
-                    removeMoveFromArraylist(piece.moves, new int[]{2, 0});
-                }
+        if(piece.moved) {
+            removeMoveFromArraylist(piece.moves, new int[]{0, -2});
+            removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+        }
+        if (piece.color == ChessColor.WHITE) {
+            if (field.getPiece(0, 0) == null){
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
+            } else if (field.getPiece(0, 0).color != ChessColor.WHITE || field.getPiece(0, 0).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
             }
+            if (field.getPiece(0, 7) == null){
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            } else if (field.getPiece(0, 7).color != ChessColor.WHITE || field.getPiece(0, 7).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            }
+        } else {
+            if (field.getPiece(7, 0) == null){
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            } else if (field.getPiece(7, 0).color != ChessColor.WHITE || field.getPiece(7, 0).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            }
+            if (field.getPiece(7, 7) == null){
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            } else if (field.getPiece(7, 7).color != ChessColor.WHITE || field.getPiece(7, 7).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+            }
+        }
+        if (!isPathClearHor(field,piece,0)){
+            removeMoveFromArraylist(piece.moves, new int[]{0, -2});
+        }
+        if (!isPathClearHor(field,piece,7)){
+            removeMoveFromArraylist(piece.moves, new int[]{0, 2});
         }
         // Check for Check
         ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;

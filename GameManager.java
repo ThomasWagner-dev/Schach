@@ -29,7 +29,10 @@ public class GameManager {
         if (!isValidMove(y, x, y2, x2)) {
             return;
         }
-        this.movePiece(y, x, y2, x2);
+        if(!this.doSpecialMove(y, x, y2, x2)){
+            this.movePiece(y, x, y2, x2);
+        }
+
         this.gameState = this.gameState==GameState.WHITE_TURN?GameState.BLACK_TURN:GameState.WHITE_TURN;
 
         this.gui.updateSchachbrett(this.board.board);
@@ -43,6 +46,37 @@ public class GameManager {
         MovesetGenerator.removeIllegalMovesInCheck(board, MovesetGenerator.isInCheck(this.board));
     }
 
+    private boolean doSpecialMove(int y, int x, int y2, int x2) {
+        Piece piece = this.board.board[y][x];
+        if (piece.piecetype == Piecetype.PAWN) {
+            if (piece.color == ChessColor.WHITE && y2 == 7) {
+                this.board.board[y][x] = new Piece(ChessColor.WHITE, Piecetype.QUEEN, y, x);
+                return true;
+            } else if (piece.color == ChessColor.BLACK && y2 == 0) {
+                this.board.board[y][x] = new Piece(ChessColor.BLACK, Piecetype.QUEEN, y, x);
+                return true;
+            }
+        }
+        // Check for castling
+        if (piece.piecetype == Piecetype.KING) {
+            if (piece.color == ChessColor.WHITE && y == 0 && x == 4 && y2 == 0 && x2 == 6) {
+                this.movePiece(0, 4, 0, 6);
+                this.board.board[0][5] = this.board.board[0][7];
+                this.board.board[0][7] = null;
+                return true;
+            } else if (piece.color == ChessColor.WHITE && y == 0 && x == 4 && y2 == 0 && x2 == 2) {
+                this.movePiece(0, 0, 0, 3);
+                return true;
+            } else if (piece.color == ChessColor.BLACK && y == 7 && x == 4 && y2 == 7 && x2 == 6) {
+                this.movePiece(7, 7, 7, 5);
+                return true;
+            } else if (piece.color == ChessColor.BLACK && y == 7 && x == 4 && y2 == 7 && x2 == 2) {
+                this.movePiece(7, 0, 7, 3);
+                return true;
+            }
+        }
+        return false;
+    }
     public void movePiece(int y, int x, int y2, int x2) {
         Piece piece = this.board.board[y][x];
         this.board.setField(y, x, null);

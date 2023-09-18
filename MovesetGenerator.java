@@ -53,13 +53,13 @@ public class MovesetGenerator {
             }
         } else {
             if (field.getPiece(7, 0) == null){
-                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
-            } else if (field.getPiece(7, 0).color != ChessColor.WHITE || field.getPiece(7, 0).moved) {
-                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
+            } else if (field.getPiece(7, 0).color != ChessColor.BLACK || field.getPiece(7, 0).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
             }
             if (field.getPiece(7, 7) == null){
                 removeMoveFromArraylist(piece.moves, new int[]{0, 2});
-            } else if (field.getPiece(7, 7).color != ChessColor.WHITE || field.getPiece(7, 7).moved) {
+            } else if (field.getPiece(7, 7).color != ChessColor.BLACK || field.getPiece(7, 7).moved) {
                 removeMoveFromArraylist(piece.moves, new int[]{0, 2});
             }
         }
@@ -73,7 +73,7 @@ public class MovesetGenerator {
         ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
         ArrayList<int[]> movesToRemove = new ArrayList<>();
         for (int[] move : piece.moves) {
-            if (field.isFieldAttackedBy(otherColor, piece.posX + move[0], piece.posY + move[1])) {
+            if (field.isFieldAttackedBy(otherColor, piece.posY + move[0], piece.posX + move[1])) {
                 movesToRemove.add(move);
             }
         }

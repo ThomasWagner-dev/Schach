@@ -137,15 +137,41 @@ public class MovesetGenerator {
             removeMoveFromArraylist(pawnMoves, new int[]{2 * vorzeichen, 0});
         }
         boolean yOoBounds = (((piece.posY + vorzeichen) > 7) || ((piece.posY + vorzeichen) < 0));
-        boolean xOoBounds = (((piece.posX + 1) > 7) || ((piece.posX - 1) < 0));
-        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX + 1) == null))
-            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 1});
-        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX - 1) == null))
-            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, -1});
+        boolean xROoBounds = ((piece.posX + 1) > 7);
+        boolean xLOoBounds = ((piece.posX - 1) < 0);
+        boolean hasOnPassantL = false;
+        boolean hasOnPassantR = false;
+        // onpassant
+        if (field.lastMove != null) {
+            if ((!xROoBounds) && ((field.getPiece (piece.posY, piece.posX + 1)!=null) &&
+                    (field.getPiece (piece.posY, piece.posX + 1).color != field.getPiece (piece.posY, piece.posX).color) &&
+                    (field.getPiece (piece.posY, piece.posX + 1).piecetype == Piecetype.PAWN))) {
+                if (Math.abs(field.lastMove[0] - field.lastMove[2]) == 2){
+                    if ((piece.posY == field.lastMove[2]) && (piece.posX + 1 == field.lastMove[3])){
+                        hasOnPassantR = true;
+                    }
+                }
+            }
+            if ((!xLOoBounds) && ((field.getPiece (piece.posY, piece.posX - 1)!=null) &&
+                    (field.getPiece (piece.posY, piece.posX - 1).color != field.getPiece (piece.posY, piece.posX).color) &&
+                    (field.getPiece (piece.posY, piece.posX - 1).piecetype == Piecetype.PAWN))) {
+                if (Math.abs(field.lastMove[0] - field.lastMove[2]) == 2){
+                    if ((piece.posY == field.lastMove[2])&& (piece.posX -1 == field.lastMove[3])){
+                        hasOnPassantL = true;
+                    }
+                }
+            }
+        }
 
+        if ((!hasOnPassantR) && ((yOoBounds || xROoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX + 1) == null)))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 1});
+        if ((!hasOnPassantL) && ((yOoBounds || xLOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX - 1) == null)))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, -1});
         if ((yOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX) != null)){
             removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 0});
         }
+
+
         piece.moves = pawnMoves;
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);

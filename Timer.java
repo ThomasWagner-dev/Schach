@@ -8,6 +8,7 @@ public class Timer extends JPanel {
     public int remainingSeconds2 = 120;
     private JLabel timerLabel1;
     private JLabel timerLabel2;
+    private SchachGUI schachGUI;
     public boolean isTimer1Active = true;
     private javax.swing.Timer timer1 = new javax.swing.Timer(1000, new ActionListener() {
         @Override
@@ -15,6 +16,8 @@ public class Timer extends JPanel {
             remainingSeconds1--;
             if (remainingSeconds1 >= 0) {
                 timerLabel1.setText(formatTime(remainingSeconds1));
+            } else {
+                schachGUI.showWinner(ChessColor.BLACK);
             }
         }
     });
@@ -24,11 +27,14 @@ public class Timer extends JPanel {
             remainingSeconds2--;
             if (remainingSeconds2 >= 0) {
                 timerLabel2.setText(formatTime(remainingSeconds2));
+            } else {
+                schachGUI.showWinner(ChessColor.WHITE);
             }
         }
     });
 
-    public Timer() {
+    public Timer(SchachGUI schachGUI) {
+        this.schachGUI = schachGUI;
         setPreferredSize(new Dimension(400, 80));
         setBackground(Color.BLACK);
 

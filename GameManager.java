@@ -2,14 +2,12 @@ import java.util.ArrayList;
 
 public class GameManager {
     public Board board;
-    public Timer timer;
     public SchachGUI gui;
     public GameState gameState;
     public GameManager() {
         this.board = new Board();
         board.buildBoard(ChessColor.WHITE);
 
-        this.timer = new Timer();
         this.gui = new SchachGUI(this);
         this.gui.updateSchachbrett(this.board.board);
         this.gameState = GameState.STANDBY;
@@ -121,9 +119,6 @@ public class GameManager {
     }
 
     public ChessColor isGameFinsished() {
-        if(gui.timerPanel.remainingSeconds1 == 0 || gui.timerPanel.remainingSeconds2 == 0){
-            return gui.timerPanel.remainingSeconds1 == 0?ChessColor.BLACK:ChessColor.WHITE;
-        }
         ArrayList<Piece> whitePieces = new ArrayList<>();
         ArrayList<Piece> blackPieces = new ArrayList<>();
         for (Piece[] row : this.board.board) {

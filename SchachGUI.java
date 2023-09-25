@@ -17,13 +17,15 @@ public class SchachGUI extends JFrame {
 
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
-    private final JLabel labelText; // Casella di testo
-    private final JButton[] buttons; // Array di bottoni
+    private final JLabel labelText;
+    private final JButton[] buttons;
 
     private JButton selectedButton = null;
     List<Integer> moveClear = new ArrayList<>();
     private GameManager gameManager;
-    Timer timerPanel = new Timer();
+    Timer timerPanel = new Timer(this);
+
+
 
     public SchachGUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -46,7 +48,6 @@ public class SchachGUI extends JFrame {
         for (JButton button : buttons) {
             infoPanel.add(button);
         }
-
         initializeSchachbrett();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
@@ -80,7 +81,6 @@ public class SchachGUI extends JFrame {
             for (int col = 0; col < SIZE; col++) {
                 JButton button = (JButton) schachbrettPanel.getComponent(row * SIZE + col);
                 button.removeAll();
-
                 String bildDatei = getBildDatei(board, row, col);
                 if (!bildDatei.isEmpty()) {
                     String imagePath = IMAGE_PATH + File.separator + bildDatei;
@@ -190,6 +190,9 @@ public class SchachGUI extends JFrame {
 
 
     private void highlightPossibleMoves(Piece piece) {
+        if(gameManager.isGameFinsished() != null){
+            return;
+        }
         for (int[] move :piece.moves) {
             int newX = piece.posX + move[1];
             int newY = piece.posY + move[0];
@@ -289,5 +292,14 @@ public class SchachGUI extends JFrame {
 
     private Color getCellColor(int row, int col) {
         return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(0, 0, 0);
+    }
+
+    public void showWinner(ChessColor gameFinsished) {
+        if(gameFinsished == ChessColor.BLACK){
+            labelText.setText("Schwarz hat Gewonnen");
+        }
+        if(gameFinsished == ChessColor.WHITE){
+            labelText.setText("Weiß hat Gewonnen");
+        }
     }
 }

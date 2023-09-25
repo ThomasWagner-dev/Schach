@@ -71,10 +71,24 @@ public class MovesetGenerator {
         }
         // Check for Check
         ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
+        int vorzeichen = piece.color == ChessColor.WHITE ? 1 : -1;
         ArrayList<int[]> movesToRemove = new ArrayList<>();
         for (int[] move : piece.moves) {
             if (field.isFieldAttackedBy(otherColor, piece.posY + move[0], piece.posX + move[1])) {
                 movesToRemove.add(move);
+            }
+            if ((piece.posY + move[0] + vorzeichen ) > 7 || (piece.posY + move[0] + vorzeichen ) < 0){
+                continue;
+            }
+            if (!(field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] + 1] == null) && !((piece.posX + move[1] + 1) > 7 || (piece.posX + move[1] + 1 ) < 0)){
+                if (field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] + 1].piecetype == Piecetype.PAWN && field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] + 1].color == otherColor){
+                    movesToRemove.add(move);
+                }
+            }
+            if (!(field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] - 1] == null) && !((piece.posX + move[1] - 1) > 7 || (piece.posX + move[1] - 1 ) < 0)){
+                if (field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] - 1].piecetype == Piecetype.PAWN && field.board[piece.posY + move[0] + vorzeichen][piece.posX + move[1] - 1].color == otherColor){
+                    movesToRemove.add(move);
+                }
             }
         }
         for (int[] move : movesToRemove) {

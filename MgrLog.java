@@ -18,8 +18,10 @@ public class MgrLog {
     public int blackElo;
     public String timeControl;
     public String termination;
+    private int lastMoveNumber;
 
     public ArrayList<String> moves = new ArrayList<>();
+    public ArrayList<String> movesToShow = new ArrayList<>();
 
     /* Beispiel Spiel zum Exportieren
     public static void main(String[] args) {
@@ -55,8 +57,12 @@ public class MgrLog {
     // Add Zug mit Zugnummer und Zeit aufm Timmer
     public void addMove(int moveNumber, int y, int x, String timeOnClock) {
         String move = convertToChessNotation(y, x);
-        String formattedMove = String.format("%d. %s {%%clk %s}", moveNumber, move, timeOnClock);
+        String platzhalter = "";
+        if (lastMoveNumber == moveNumber) platzhalter = "..";
+        String formattedMove = String.format("%d.%s %s {%%clk %s}", moveNumber, platzhalter, move, timeOnClock);
+        lastMoveNumber = moveNumber;
         moves.add(formattedMove);
+        movesToShow.add (moveNumber + ". " + move);
     }
     // Konvertiert von X und Y in Schachnotation (z.B. 0, 3 -> "a4")
     public String convertToChessNotation(int y, int x) {
@@ -117,7 +123,7 @@ public class MgrLog {
                 writer.println("[Termination " + "\"" + termination + "\"]");
                 writer.println ("");
                 for (String move : moves) {
-                    writer.println (move);
+                    writer.print (move);
                 }
             }
         } catch (IOException e) {

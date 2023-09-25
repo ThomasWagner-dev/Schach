@@ -18,7 +18,6 @@ public class SchachGUI extends JFrame {
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
     private final JLabel labelText;
-    private final JButton[] buttons;
 
     private JButton selectedButton = null;
     List<Integer> moveClear = new ArrayList<>();
@@ -36,18 +35,13 @@ public class SchachGUI extends JFrame {
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
-        labelText = new JLabel("das ist \n ein test");
+        labelText = new JLabel("");
         labelText.setForeground(Color.WHITE);
         labelText.setHorizontalAlignment(SwingConstants.CENTER);
-        buttons = new JButton[5];
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new JButton("Button" + (i + 1));
-        }
+
         infoPanel.add(timerPanel);
         infoPanel.add(labelText);
-        for (JButton button : buttons) {
-            infoPanel.add(button);
-        }
+
         initializeSchachbrett();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
@@ -173,6 +167,7 @@ public class SchachGUI extends JFrame {
         if (moveClear.size() == 4) {
             gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
             updateSchachbrett(gameManager.board.board);
+            updateInfoPanel();
             if(timerPanel.isTimer1Active) {
                 timerPanel.startTimer2();
             }
@@ -187,7 +182,20 @@ public class SchachGUI extends JFrame {
 
     }
 
+    public void updateInfoPanel(){
+        labelText.setText ("\n");
+        for (int i = 0; i < gameManager.log.movesToShow.size(); i++) {
+            String moves = gameManager.log.movesToShow.get(i);
 
+            labelText.setText(labelText.getText() + moves + "  ");
+
+            // Überprüfen, ob der Durchgang gerade ist (0-basiert)
+            if (i % 2 == 1) {
+                labelText.setText(labelText.getText() + "\n"); // Fügt eine neue Zeile hinzu
+            }
+        }
+
+    }
 
     private void highlightPossibleMoves(Piece piece) {
         if(gameManager.isGameFinsished() != null){

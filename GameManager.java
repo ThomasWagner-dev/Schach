@@ -21,7 +21,8 @@ public class GameManager {
     }
     public void logMove(int y, int x, int y2, int x2){
         System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
-        movesZaehler ++;
+        if (board.board[y][x].color == ChessColor.WHITE)
+            movesZaehler ++;
 
         String timerString;
         if(gui.timerPanel.isTimer1Active) timerString = gui.timerPanel.timerLabel1.getText ();

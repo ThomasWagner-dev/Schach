@@ -182,7 +182,9 @@ public class SchachGUI extends JFrame {
             System.out.println("clear");
             moveClear.clear();
         } else {
-            highlightPossibleMoves(gameManager.board.board[y][x]);
+            if (gameManager.board.board[y][x] != null) {
+                highlightPossibleMoves(gameManager.board.board[y][x]);
+            }
         }
 
     }

@@ -294,13 +294,18 @@ public class SchachGUI extends JFrame {
         return (row + col) % 2 == 0 ? new Color(245, 245, 220) : new Color(0, 0, 0);
     }
 
-    public String showWinner(ChessColor gameFinsished) {
+    public void showWinner(ChessColor gameFinsished) {
         if(gameFinsished == ChessColor.BLACK){
             labelText.setText("Schwarz hat Gewonnen");
         }
         if(gameFinsished == ChessColor.WHITE){
             labelText.setText("Weiß hat Gewonnen");
         }
-        return labelText.getText ();
+        gameManager.log.setEnd ("1:0",labelText.getText ());
+        try {
+            gameManager.log.exportToCustomFormat("Spiel.pgn");
+        } catch (IOException e) {
+            throw new RuntimeException (e);
+        }
     }
 }

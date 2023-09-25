@@ -52,12 +52,7 @@ public class GameManager {
         if (this.isGameFinsished() != null) {
             this.gameState = GameState.FINISHED;
             this.gui.updateSchachbrett(this.board.board);
-            log.setEnd ("1:0",this.gui.showWinner(this.isGameFinsished()));
-            try {
-                log.exportToCustomFormat("Spiel.pgn");
-            } catch (IOException e) {
-                throw new RuntimeException (e);
-            }
+            this.gui.showWinner(this.isGameFinsished());
             return;
         }
         this.gui.updateSchachbrett(this.board.board);

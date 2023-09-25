@@ -19,18 +19,18 @@ public class Board {
         this.board[7][0] = new Piece(otherSide, Piecetype.ROOK, 7, 0);
         this.board[7][7] = new Piece(otherSide, Piecetype.ROOK, 7, 7);
         // Place Knights
-//        this.board[0][1] = new Piece(side, Piecetype.KNIGHT, 0, 1);
-//        this.board[0][6] = new Piece(side, Piecetype.KNIGHT, 0, 6);
-//        this.board[7][1] = new Piece(otherSide, Piecetype.KNIGHT, 7, 1);
-//        this.board[7][6] = new Piece(otherSide, Piecetype.KNIGHT, 7, 6);
+        this.board[0][1] = new Piece(side, Piecetype.KNIGHT, 0, 1);
+        this.board[0][6] = new Piece(side, Piecetype.KNIGHT, 0, 6);
+        this.board[7][1] = new Piece(otherSide, Piecetype.KNIGHT, 7, 1);
+        this.board[7][6] = new Piece(otherSide, Piecetype.KNIGHT, 7, 6);
         // Place Bishops
-//        this.board[0][2] = new Piece(side, Piecetype.BISHOP, 0, 2);
-//        this.board[0][5] = new Piece(side, Piecetype.BISHOP, 0, 5);
-//        this.board[7][2] = new Piece(otherSide, Piecetype.BISHOP, 7, 2);
-//        this.board[7][5] = new Piece(otherSide, Piecetype.BISHOP, 7, 5);
+        this.board[0][2] = new Piece(side, Piecetype.BISHOP, 0, 2);
+        this.board[0][5] = new Piece(side, Piecetype.BISHOP, 0, 5);
+        this.board[7][2] = new Piece(otherSide, Piecetype.BISHOP, 7, 2);
+        this.board[7][5] = new Piece(otherSide, Piecetype.BISHOP, 7, 5);
         // Place Queens
-//        this.board[0][3] = new Piece(side, Piecetype.QUEEN, 0, 3);
-//        this.board[7][3] = new Piece(otherSide, Piecetype.QUEEN, 7, 3);
+        this.board[0][3] = new Piece(side, Piecetype.QUEEN, 0, 3);
+        this.board[7][3] = new Piece(otherSide, Piecetype.QUEEN, 7, 3);
         // Place Kings
         this.board[0][4] = new Piece(side, Piecetype.KING, 0, 4);
         this.board[7][4] = new Piece(otherSide, Piecetype.KING, 7, 4);

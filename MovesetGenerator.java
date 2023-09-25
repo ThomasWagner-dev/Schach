@@ -123,9 +123,6 @@ public class MovesetGenerator {
     }
 
     private static void generatePawnMoves(Board field, Piece piece) {
-        if (piece.moved) {
-            System.out.println("Pawn moved");
-        }
         int vorzeichen = 1;
         if (piece.color == ChessColor.BLACK) {
             vorzeichen = -1;
@@ -225,23 +222,6 @@ public class MovesetGenerator {
         removeOOBounds(piece);
         removeBlockedMoves(field, piece);
         removeAllyAttacks(field, piece);
-        //check if castle
-        //check if rook is on A1/A8 if white/black
-        /*if (piece.color == ChessColor.WHITE) {
-            if (((piece.posX == 0 && piece.posY == 0)||(piece.posX == 8 && piece.posY == 0))&&piece.moved==false&&field.getPiece(4,0).moved==false) {
-                rookMoves.add(new int[]{0,3});
-            }
-            if (!(field.getPiece(7, 0).color == ChessColor.WHITE && !field.getPiece(7, 0).moved)) {
-                //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});
-            }
-        } else {
-            if (!(field.getPiece(0, 7).color == ChessColor.BLACK && !field.getPiece(0, 7).moved)) {
-                //removeMoveFromArraylist(theoreticalMoves, new int[]{-2, 0});
-            }
-            if (!(field.getPiece(7, 7).color == ChessColor.BLACK && !field.getPiece(7, 7).moved)) {
-                //removeMoveFromArraylist(theoreticalMoves, new int[]{2, 0});
-            }
-        }*/
     }
 
     public static boolean isPathClearHor(Board field, Piece piece, int x) {
@@ -382,7 +362,7 @@ public class MovesetGenerator {
             ArrayList<int[]> movesToRemove = new ArrayList<>();
             for (int[] move : piece.moves) {
                 Board temp = new Board();
-                temp.board = field.board.clone();
+                temp.board = cloneBoard(field.board);
                 temp.setField(piece.posY, piece.posX, null);
                 temp.setField(piece.posY + move[0], piece.posX + move[1], piece);
                 if (isInCheck(temp) == chessColor) {

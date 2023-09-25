@@ -4,15 +4,37 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Timer extends JPanel {
-    private int remainingSeconds1 = 120;
-    private int remainingSeconds2 = 120;
+    public int remainingSeconds1 = 120;
+    public int remainingSeconds2 = 120;
     private JLabel timerLabel1;
     private JLabel timerLabel2;
-    private javax.swing.Timer timer1;
-    private javax.swing.Timer timer2;
-    private boolean isTimer1Active = true;
+    private SchachGUI schachGUI;
+    public boolean isTimer1Active = true;
+    private javax.swing.Timer timer1 = new javax.swing.Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            remainingSeconds1--;
+            if (remainingSeconds1 >= 0) {
+                timerLabel1.setText(formatTime(remainingSeconds1));
+            } else {
+                schachGUI.showWinner(ChessColor.BLACK);
+            }
+        }
+    });
+    private javax.swing.Timer timer2 = new javax.swing.Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            remainingSeconds2--;
+            if (remainingSeconds2 >= 0) {
+                timerLabel2.setText(formatTime(remainingSeconds2));
+            } else {
+                schachGUI.showWinner(ChessColor.WHITE);
+            }
+        }
+    });
 
-    public Timer() {
+    public Timer(SchachGUI schachGUI) {
+        this.schachGUI = schachGUI;
         setPreferredSize(new Dimension(400, 80));
         setBackground(Color.BLACK);
 
@@ -31,37 +53,14 @@ public class Timer extends JPanel {
     }
 
     public void startTimer1() {
-        timer1 = new javax.swing.Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                remainingSeconds1--;
-                if (remainingSeconds1 >= 0) {
-                    timerLabel1.setText(formatTime(remainingSeconds1));
-                } else {
-                    stopTimer1(); // Aggiunto per fermare il timer1
-                    isTimer1Active = false;
-                    startTimer2();
-                }
-            }
-        });
+        timer2.stop();
+        isTimer1Active = true;
         timer1.start();
     }
 
     public void startTimer2() {
-        timer2 = new javax.swing.Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                remainingSeconds2--;
-                if (remainingSeconds2 >= 0) {
-                    timerLabel2.setText(formatTime(remainingSeconds2));
-                } else {
-                    stopTimer2(); // Aggiunto per fermare il timer2
-                    isTimer1Active = true;
-                    startTimer1();
-                }
-            }
-        });
-
+        timer1.stop();
+        isTimer1Active = false;
         timer2.start();
     }
 
@@ -73,29 +72,9 @@ public class Timer extends JPanel {
 
     public void stopTimers() {
         if (isTimer1Active) {
-            stopTimer1();
-        } else {
-            stopTimer2();
-        }
-    }
-
-    public void stopTimer1() {
-        if (timer1 != null && timer1.isRunning()) {
             timer1.stop();
-        }
-    }
-
-    public void stopTimer2() {
-        if (timer2 != null && timer2.isRunning()) {
+        } else {
             timer2.stop();
         }
-    }
-
-    public boolean isTimer1Active() {
-        return isTimer1Active;
-    }
-
-    public void setTimer1Active(boolean timer1Active) {
-        isTimer1Active = timer1Active;
     }
 }

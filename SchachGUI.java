@@ -17,6 +17,8 @@ public class SchachGUI extends JFrame {
 
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
+    private final JLabel labelText; // Casella di testo
+    private final JButton[] buttons; // Array di bottoni
 
     private JButton selectedButton = null;
     List<Integer> moveClear = new ArrayList<>();
@@ -27,14 +29,24 @@ public class SchachGUI extends JFrame {
         this.gameManager = gameManager;
         setTitle("Schachspiel");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         schachbrettPanel = new JPanel(new GridLayout(SIZE, SIZE));
         schachbrettPanel.setPreferredSize(new Dimension(CELL_SIZE * SIZE, CELL_SIZE * SIZE));
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
-
+        labelText = new JLabel("das ist \n ein test");
+        labelText.setForeground(Color.WHITE);
+        labelText.setHorizontalAlignment(SwingConstants.CENTER);
+        buttons = new JButton[5];
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new JButton("Button" + (i + 1));
+        }
         infoPanel.add(timerPanel);
+        infoPanel.add(labelText);
+        for (JButton button : buttons) {
+            infoPanel.add(button);
+        }
+
         initializeSchachbrett();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
@@ -49,7 +61,6 @@ public class SchachGUI extends JFrame {
         setVisible(true);
     }
 
-
     private void initializeSchachbrett() {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
@@ -57,9 +68,7 @@ public class SchachGUI extends JFrame {
                 button.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
                 button.setBackground(getCellColor(row, col));
                 button.setName(row + "," + col);
-
                 button.addActionListener(e -> handleCellClick(button));
-
                 schachbrettPanel.add(button);
             }
         }
@@ -115,7 +124,6 @@ public class SchachGUI extends JFrame {
         columnLettersPanel.add(new JLabel(""));
         columnLettersPanel.add(new JLabel(""));
         columnLettersPanel.add(new JLabel(""));
-
         add(columnLettersPanel, BorderLayout.NORTH);
     }
 
@@ -165,20 +173,18 @@ public class SchachGUI extends JFrame {
         if (moveClear.size() == 4) {
             gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
             updateSchachbrett(gameManager.board.board);
-
-            if (timerPanel.isTimer1Active()) {
-                timerPanel.stopTimer1();
+            if(timerPanel.isTimer1Active) {
                 timerPanel.startTimer2();
-            } else {
-                timerPanel.stopTimer2();
+            }
+            else {
                 timerPanel.startTimer1();
             }
-
             System.out.println("clear");
             moveClear.clear();
         } else {
             highlightPossibleMoves(gameManager.board.board[y][x]);
         }
+
     }
 
 

@@ -53,13 +53,13 @@ public class MovesetGenerator {
             }
         } else {
             if (field.getPiece(7, 0) == null){
-                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
-            } else if (field.getPiece(7, 0).color != ChessColor.WHITE || field.getPiece(7, 0).moved) {
-                removeMoveFromArraylist(piece.moves, new int[]{0, 2});
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
+            } else if (field.getPiece(7, 0).color != ChessColor.BLACK || field.getPiece(7, 0).moved) {
+                removeMoveFromArraylist(piece.moves, new int[]{0, -2});
             }
             if (field.getPiece(7, 7) == null){
                 removeMoveFromArraylist(piece.moves, new int[]{0, 2});
-            } else if (field.getPiece(7, 7).color != ChessColor.WHITE || field.getPiece(7, 7).moved) {
+            } else if (field.getPiece(7, 7).color != ChessColor.BLACK || field.getPiece(7, 7).moved) {
                 removeMoveFromArraylist(piece.moves, new int[]{0, 2});
             }
         }
@@ -73,7 +73,7 @@ public class MovesetGenerator {
         ChessColor otherColor = piece.color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
         ArrayList<int[]> movesToRemove = new ArrayList<>();
         for (int[] move : piece.moves) {
-            if (field.isFieldAttackedBy(otherColor, piece.posX + move[0], piece.posY + move[1])) {
+            if (field.isFieldAttackedBy(otherColor, piece.posY + move[0], piece.posX + move[1])) {
                 movesToRemove.add(move);
             }
         }
@@ -131,10 +131,20 @@ public class MovesetGenerator {
             vorzeichen = -1;
         }
         ArrayList<int[]> pawnMoves = new ArrayList<>();
-        int[][] temp = {{vorzeichen, 0}, {2 * vorzeichen, 0}};
+        int[][] temp = {{vorzeichen, 0}, {2 * vorzeichen, 0}, {vorzeichen, 1},{vorzeichen, -1}};
         Collections.addAll(pawnMoves, temp);
         if (piece.moved) {
             removeMoveFromArraylist(pawnMoves, new int[]{2 * vorzeichen, 0});
+        }
+        boolean yOoBounds = (((piece.posY + vorzeichen) > 7) || ((piece.posY + vorzeichen) < 0));
+        boolean xOoBounds = (((piece.posX + 1) > 7) || ((piece.posX - 1) < 0));
+        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX + 1) == null))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 1});
+        if ((yOoBounds || xOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX - 1) == null))
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, -1});
+
+        if ((yOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX) != null)){
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 0});
         }
         piece.moves = pawnMoves;
         removeOOBounds(piece);

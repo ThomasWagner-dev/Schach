@@ -60,18 +60,28 @@ public class GameManager {
         // Check for castling
         if (piece.piecetype == Piecetype.KING) {
             if (piece.color == ChessColor.WHITE && y == 0 && x == 4 && y2 == 0 && x2 == 6) {
-                this.movePiece(0, 4, 0, 6);
-                this.board.board[0][5] = this.board.board[0][7];
-                this.board.board[0][7] = null;
+                this.movePiece(0, 7, 0, 5);
+                piece.moved = true;
+                this.board.board[0][6] = this.board.board[0][4];
+                this.board.board[0][4] = null;
                 return true;
             } else if (piece.color == ChessColor.WHITE && y == 0 && x == 4 && y2 == 0 && x2 == 2) {
                 this.movePiece(0, 0, 0, 3);
+                piece.moved = true;
+                this.board.board[0][2] = this.board.board[0][4];
+                this.board.board[0][4] = null;
                 return true;
             } else if (piece.color == ChessColor.BLACK && y == 7 && x == 4 && y2 == 7 && x2 == 6) {
                 this.movePiece(7, 7, 7, 5);
+                piece.moved = true;
+                this.board.board[7][5] = this.board.board[7][7];
+                this.board.board[7][7] = null;
                 return true;
             } else if (piece.color == ChessColor.BLACK && y == 7 && x == 4 && y2 == 7 && x2 == 2) {
                 this.movePiece(7, 0, 7, 3);
+                piece.moved = true;
+                this.board.board[7][2] = this.board.board[7][4];
+                this.board.board[7][4] = null;
                 return true;
             }
         }

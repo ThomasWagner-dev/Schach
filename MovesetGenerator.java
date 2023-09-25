@@ -167,6 +167,10 @@ public class MovesetGenerator {
         if ((yOoBounds) || (field.getPiece (piece.posY + vorzeichen, piece.posX) != null)){
             removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen, 0});
         }
+        if ((((piece.posY + vorzeichen*2) > 7) || ((piece.posY + vorzeichen*2) < 0))
+                || (field.getPiece (piece.posY + vorzeichen*2, piece.posX) != null)){
+            removeMoveFromArraylist(pawnMoves, new int[]{vorzeichen*2, 0});
+        }
 
 
         piece.moves = pawnMoves;

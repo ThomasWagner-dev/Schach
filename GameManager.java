@@ -63,9 +63,9 @@ public class GameManager {
                 this.board.board[y][x] = new Piece(ChessColor.BLACK, Piecetype.QUEEN, y, x);
                 return true;
             }
-            int vorzeichen = 1;
+            int vorzeichen = -1;
             if (piece.color == ChessColor.BLACK) {
-                vorzeichen = -1;
+                vorzeichen = 1;
             }
             if (x != x2) {
                 if (this.board.board[y2][x2] == null){

@@ -36,7 +36,7 @@ public class SchachGUI extends JFrame {
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
-        labelText = new JLabel("das ist \n ein test");
+        labelText = new JLabel("Info");
         labelText.setForeground(Color.WHITE);
         labelText.setHorizontalAlignment(SwingConstants.CENTER);
         buttons = new JButton[5];

@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 public class Timer extends JPanel {
     public int remainingSeconds1 = 120;
     public int remainingSeconds2 = 120;
-    private JLabel timerLabel1;
-    private JLabel timerLabel2;
+    public JLabel timerLabel1;
+    public JLabel timerLabel2;
     private SchachGUI schachGUI;
     public boolean isTimer1Active = true;
     private javax.swing.Timer timer1 = new javax.swing.Timer(1000, new ActionListener() {

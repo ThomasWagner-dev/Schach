@@ -1,10 +1,13 @@
+import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class GameManager {
     public Board board;
     public SchachGUI gui;
     public GameState gameState;
-
+    public MgrLog log = new MgrLog ();
+    public int movesZaehler = 0;
     public GameManager() {
         this.board = new Board();
         board.buildBoard(ChessColor.WHITE);
@@ -12,15 +15,25 @@ public class GameManager {
         this.gui = new SchachGUI(this);
         this.gui.updateSchachbrett(this.board.board);
         this.gameState = GameState.STANDBY;
+        log.init("Offline Chess","Lokal", LocalDate.now(),"-","PlayerOne","PlayerTwo",
+                0,0,"120");
         startGame();
     }
+    public void logMove(int y, int x, int y2, int x2){
+        System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
+        movesZaehler ++;
 
+        String timerString;
+        if(gui.timerPanel.isTimer1Active) timerString = gui.timerPanel.timerLabel1.getText ();
+        else timerString = gui.timerPanel.timerLabel2.getText ();
+        log.addMove(movesZaehler, y2,x2,timerString);
+    }
     public void startGame() {
         this.gameState = GameState.WHITE_TURN;
     }
 
     public void move(int y, int x, int y2, int x2) {
-        System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
+        logMove(y,x,y2,x2);
         this.board.lastMove = new int[]{y, x, y2, x2};
         if (this.board.board[y][x] == null) {
             return;

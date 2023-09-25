@@ -303,5 +303,11 @@ public class SchachGUI extends JFrame {
         if(gameFinsished == ChessColor.WHITE){
             labelText.setText("Weiß hat Gewonnen");
         }
+        gameManager.log.setEnd ("1:0",labelText.getText ());
+        try {
+            gameManager.log.exportToCustomFormat("Spiel.pgn");
+        } catch (IOException e) {
+            throw new RuntimeException (e);
+        }
     }
 }

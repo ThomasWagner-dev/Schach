@@ -4,6 +4,7 @@ public class GameManager {
     public Board board;
     public SchachGUI gui;
     public GameState gameState;
+
     public GameManager() {
         this.board = new Board();
         board.buildBoard(ChessColor.WHITE);
@@ -20,6 +21,7 @@ public class GameManager {
 
     public void move(int y, int x, int y2, int x2) {
         System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
+        this.board.lastMove = new int[]{y, x, y2, x2};
         if (this.board.board[y][x] == null) {
             return;
         }
@@ -60,6 +62,15 @@ public class GameManager {
             } else if (piece.color == ChessColor.BLACK && y2 == 0) {
                 this.board.board[y][x] = new Piece(ChessColor.BLACK, Piecetype.QUEEN, y, x);
                 return true;
+            }
+            int vorzeichen = -1;
+            if (piece.color == ChessColor.BLACK) {
+                vorzeichen = 1;
+            }
+            if (x != x2) {
+                if (this.board.board[y2][x2] == null){
+                    this.board.board[y2 + vorzeichen][x2] = null;
+                }
             }
         }
         // Check for castling

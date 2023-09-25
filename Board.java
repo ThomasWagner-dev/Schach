@@ -2,10 +2,9 @@ import java.util.ArrayList;
 
 public class Board {
     public Piece[][] board;
+    public int[] lastMove;
 
-    public Board() {
-        this.board = new Piece[8][8];
-    }
+    public Board() {this.board = new Piece[8][8];}
 
     public void buildBoard(ChessColor side) {
         ChessColor otherSide = side == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;

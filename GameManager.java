@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class GameManager {
     public Board board;
     public Timer timer;
@@ -34,7 +36,12 @@ public class GameManager {
         }
 
         this.gameState = this.gameState==GameState.WHITE_TURN?GameState.BLACK_TURN:GameState.WHITE_TURN;
-
+        if (this.isGameFinsished() != null) {
+            this.gameState = GameState.FINISHED;
+            this.gui.updateSchachbrett(this.board.board);
+            this.gui.showWinner(this.isGameFinsished());
+            return;
+        }
         this.gui.updateSchachbrett(this.board.board);
         for (int i = 0; i < this.board.board.length; i++) {
             for (int j = 0; j < this.board.board.length; j++) {
@@ -111,5 +118,46 @@ public class GameManager {
             }
         }
         return false;
+    }
+
+    public ChessColor isGameFinsished() {
+        if(gui.timerPanel.remainingSeconds1 == 0 || gui.timerPanel.remainingSeconds2 == 0){
+            return gui.timerPanel.remainingSeconds1 == 0?ChessColor.BLACK:ChessColor.WHITE;
+        }
+        ArrayList<Piece> whitePieces = new ArrayList<>();
+        ArrayList<Piece> blackPieces = new ArrayList<>();
+        for (Piece[] row : this.board.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == ChessColor.WHITE) {
+                    whitePieces.add(piece);
+                }
+            }
+        }
+        for (Piece[] row : this.board.board) {
+            for (Piece piece : row) {
+                if (piece != null && piece.color == ChessColor.BLACK) {
+                    blackPieces.add(piece);
+                }
+            }
+        }
+        boolean whiteLost = true;
+        for (Piece piece: whitePieces) {
+            if(!piece.moves.isEmpty()){
+                whiteLost = false;
+            }
+        }
+        boolean blackLost = true;
+        for (Piece piece: blackPieces) {
+            if(!piece.moves.isEmpty()){
+                blackLost = false;
+            }
+        }
+        if(whiteLost){
+            return ChessColor.BLACK;
+        } else if(blackLost){
+            return ChessColor.WHITE;
+        } else {
+            return null;
+        }
     }
 }

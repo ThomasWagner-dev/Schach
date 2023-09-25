@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Timer extends JPanel {
-    private int remainingSeconds1 = 120;
-    private int remainingSeconds2 = 120;
+    public int remainingSeconds1 = 120;
+    public int remainingSeconds2 = 120;
     private JLabel timerLabel1;
     private JLabel timerLabel2;
     public boolean isTimer1Active = true;

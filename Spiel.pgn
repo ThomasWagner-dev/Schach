@@ -10,11 +10,4 @@
 [TimeControl "120"]
 [Termination "Schwarz hat Gewonnen"]
 
-1. e4 {%clk 01:56}
-1... e3 {%clk 01:57}
-2. f5 {%clk 01:53}
-2... h4 {%clk 01:48}
-3. c5 {%clk 01:49}
-3... c3 {%clk 01:44}
-4. e3 {%clk 01:47}
-4... f6 {%clk 01:41}
+1. e5 {%clk 01:58}1... e4 {%clk 01:55}2. f6 {%clk 01:55}2... f3 {%clk 01:53}3. e4 {%clk 01:46}3... e2 {%clk 01:50}4. f6 {%clk 01:44}4... e5 {%clk 01:48}

@@ -67,7 +67,7 @@ public class MgrLog {
     // Konvertiert von X und Y in Schachnotation (z.B. 0, 3 -> "a4")
     public String convertToChessNotation(int y, int x) {
         char chessX = (char) ('a' + x); // Konvertierung von X in Buchstaben
-        int chessY = 8 - y-1; // Umkehrung der Y-Koordinate
+        int chessY = 8 - y; // Umkehrung der Y-Koordinate
         return String.format("%c%d", chessX, chessY);
     }
 

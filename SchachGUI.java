@@ -18,6 +18,7 @@ public class SchachGUI extends JFrame {
     private final JPanel schachbrettPanel;
     private final JPanel infoPanel;
     private final JLabel labelText;
+    private JTextArea memoTextArea;
 
     private JButton selectedButton = null;
     List<Integer> moveClear = new ArrayList<>();
@@ -35,11 +36,19 @@ public class SchachGUI extends JFrame {
         infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(200, CELL_SIZE * SIZE));
         infoPanel.setBackground(Color.BLACK);
+        memoTextArea = new JTextArea();
+        memoTextArea.setEditable(false);
+        memoTextArea.setLineWrap(true); // Aktivieren Sie den Zeilenumbruch
+        memoTextArea.setWrapStyleWord(true); // Aktivieren Sie den Wortumbruch
+        JScrollPane scrollPane = new JScrollPane(memoTextArea);
+
         labelText = new JLabel("");
+
         labelText.setForeground(Color.WHITE);
         labelText.setHorizontalAlignment(SwingConstants.CENTER);
 
         infoPanel.add(timerPanel);
+        infoPanel.add (scrollPane);
         infoPanel.add(labelText);
 
         initializeSchachbrett();
@@ -168,12 +177,6 @@ public class SchachGUI extends JFrame {
             gameManager.move(moveClear.get(0), moveClear.get(1), moveClear.get(2), moveClear.get(3));
             updateSchachbrett(gameManager.board.board);
             updateInfoPanel();
-            if(timerPanel.isTimer1Active) {
-                timerPanel.startTimer2();
-            }
-            else {
-                timerPanel.startTimer1();
-            }
             System.out.println("clear");
             moveClear.clear();
         } else {
@@ -183,15 +186,15 @@ public class SchachGUI extends JFrame {
     }
 
     public void updateInfoPanel(){
-        labelText.setText ("\n");
+        memoTextArea.setText ("");
         for (int i = 0; i < gameManager.log.movesToShow.size(); i++) {
             String moves = gameManager.log.movesToShow.get(i);
 
-            labelText.setText(labelText.getText() + moves + "  ");
+            memoTextArea.setText(memoTextArea.getText() + moves + "  ");
 
             // Überprüfen, ob der Durchgang gerade ist (0-basiert)
             if (i % 2 == 1) {
-                labelText.setText(labelText.getText() + "\n"); // Fügt eine neue Zeile hinzu
+                memoTextArea.setText(memoTextArea.getText() + "\n"); // Fügt eine neue Zeile hinzu
             }
         }
 

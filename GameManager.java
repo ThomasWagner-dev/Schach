@@ -21,7 +21,7 @@ public class GameManager {
     }
     public void logMove(int y, int x, int y2, int x2){
         System.out.println("Y: "+ y + " X: " + x  + " Y2: " + y2 + " X2: " + x2);
-        if (board.board[y][x].color == ChessColor.WHITE)
+        if (board.board[y2][x2].color == ChessColor.WHITE)
             movesZaehler ++;
 
         String timerString;
@@ -34,7 +34,6 @@ public class GameManager {
     }
 
     public void move(int y, int x, int y2, int x2) {
-        logMove(y,x,y2,x2);
         this.board.lastMove = new int[]{y, x, y2, x2};
         if (this.board.board[y][x] == null) {
             return;
@@ -48,7 +47,13 @@ public class GameManager {
         if(!this.doSpecialMove(y, x, y2, x2)){
             this.movePiece(y, x, y2, x2);
         }
-
+        logMove(y,x,y2,x2);
+        if(gui.timerPanel.isTimer1Active) {
+            gui.timerPanel.startTimer2();
+        }
+        else {
+            gui.timerPanel.startTimer1();
+        }
         this.gameState = this.gameState==GameState.WHITE_TURN?GameState.BLACK_TURN:GameState.WHITE_TURN;
         if (this.isGameFinsished() != null) {
             this.gameState = GameState.FINISHED;

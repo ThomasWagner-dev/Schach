@@ -400,6 +400,13 @@ public class MovesetGenerator {
         temp.board = cloneBoard(field.board);
         temp.setField(p.posY, p.posX, null);
         temp.setField(y, x, p);
+        for (int i = 0; i < field.board.length; i++) {
+            for (int j = 0; j < field.board.length; j++) {
+                if (field.board[i][j] != null) {
+                    MovesetGenerator.generateMoves(field, field.board[i][j]);
+                }
+            }
+        }
         return isInCheck(temp) == color;
     }
 
